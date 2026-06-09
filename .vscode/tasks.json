@@ -250,7 +250,7 @@
     },
 
     // ==========================================
-    // === Git
+    // === Git & Deploy
     // ==========================================
     {
       "label": "📤 Git: Push",
@@ -261,6 +261,26 @@
         "reveal": "always",
         "panel": "shared"
       }
+    },
+    {
+      "label": "🚀 Deploy: Trigger GitHub Release",
+      "type": "shell",
+      "command": "git tag ${input:releaseVersion} && git push origin ${input:releaseVersion}",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "group": "deploy"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "releaseVersion",
+      "type": "promptString",
+      "description": "Nhập phiên bản tag để trigger Release (VD: v0.1.1)",
+      "default": "v0.1.1"
     }
   ]
 }

@@ -7,7 +7,7 @@
     "beforeDevCommand": "pnpm --filter @kbm/web dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm --filter @kbm/web build",
-    "frontendDist": "../web/dist"
+    "frontendDist": "../../web/dist"
   },
   "app": {
     "windows": [

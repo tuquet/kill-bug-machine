@@ -70,7 +70,7 @@ kill-bug-machine/
 
 Bạn có thể cài đặt môi trường bằng hai cách tùy thuộc vào việc bạn có quyền Administrator (UAC) hay không.
 
-### 🛡️ Cách 1: KHÔNG có quyền Admin (Khuyên dùng)
+### 🛡️ Cách 1: Không có quyền Admin (Khuyên dùng)
 > Sử dụng [Scoop](https://scoop.sh) và MinGW (GNU target) để cài đặt mọi thứ vào User Profile.
 
 <details>
@@ -139,7 +139,7 @@ git config --global core.autocrlf true
 
 </details>
 
-### 🔑 Cách 2: CÓ quyền Admin
+### 🔑 Cách 2: Có quyền Admin
 > Sử dụng Winget và Visual Studio Build Tools (MSVC target) - tiêu chuẩn của Microsoft.
 
 <details>
