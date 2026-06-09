@@ -15,6 +15,8 @@ jobs:
       matrix:
         platform: [macos-latest, ubuntu-22.04, windows-latest]
     runs-on: ${{ matrix.platform }}
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
@@ -34,6 +36,11 @@ jobs:
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Force MSVC on Windows by removing GNU config
+        if: matrix.platform == 'windows-latest'
+        run: Remove-Item -Path apps/desktop/src-tauri/.cargo/config.toml -ErrorAction SilentlyContinue
+        shell: pwsh
+
       - name: Install dependencies (Ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
@@ -49,6 +56,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectPath: './apps/desktop'
+          tauriScript: 'pnpm tauri'
           tagName: v__VERSION__
           releaseName: 'Kill Bug Machine v__VERSION__'
           releaseBody: 'See the assets below to download and install this version.'
