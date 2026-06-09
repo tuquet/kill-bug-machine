@@ -2,9 +2,9 @@
   "name": "kill-bug-machine",
   "private": true,
   "version": "0.1.0",
-  "description": "Cross-platform Desktop DevTool — Crawl, manage, and expose bugs via MCP for AI agents",
+  "description": "Tauri + React + Axum monorepo boilerplate",
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "pnpm --filter @kbm/web dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
@@ -13,7 +13,12 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "clean": "turbo run clean",
-    "prepare": "husky"
+    "prepare": "husky",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "dev:all": "concurrently -n WEB,DOCS -c blue,green \"pnpm dev\" \"pnpm docs:dev\"",
+    "dev:desktop": "pnpm --filter @kbm/desktop tauri dev"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
@@ -23,8 +28,11 @@
     "lint-staged": "^15.2.0",
     "prettier": "^3.4.0",
     "rimraf": "^6.0.0",
+    "concurrently": "^9.0.0",
     "turbo": "^2.3.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.35"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

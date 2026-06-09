@@ -25,6 +25,19 @@
       }
     },
     {
+      "label": "📚 Dev: Docs (VitePress)",
+      "type": "shell",
+      "command": "pnpm docs:dev",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "dev"
+      }
+    },
+    {
       "label": "🖥️ Dev: Desktop (Tauri)",
       "type": "shell",
       "command": "pnpm --filter @kbm/desktop tauri dev",
@@ -38,9 +51,9 @@
       }
     },
     {
-      "label": "🚀 Dev: All (Turbo)",
+      "label": "🚀 Dev: All (Web + Docs)",
       "type": "shell",
-      "command": "pnpm turbo dev",
+      "command": "pnpm dev:all",
       "group": "build",
       "isBackground": true,
       "problemMatcher": [],

@@ -7,12 +7,7 @@ export type {
   PaginatedResult,
 } from './common.types';
 
-export type {
-  BugIssue,
-  CreateIssueInput,
-  UpdateIssueInput,
-  IssueFilters,
-} from './issue.types';
+export type { BugIssue, CreateIssueInput, UpdateIssueInput, IssueFilters } from './issue.types';
 
 export type {
   CrawlTarget,
@@ -27,9 +22,4 @@ export type {
   CrawlerPlugin,
 } from './crawler.types';
 
-export type {
-  McpServerConfig,
-  McpServerStatus,
-  Statistics,
-  AnalysisResult,
-} from './mcp.types';
+export type { McpServerConfig, McpServerStatus, Statistics, AnalysisResult } from './mcp.types';

@@ -1,10 +1,9 @@
-pub mod issues;
-
-use axum::Router;
+use axum::{Router, routing::get, response::IntoResponse, Json};
 use sqlx::SqlitePool;
-use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
+use std::net::SocketAddr;
 use tokio::net::TcpListener;
+use utoipa::OpenApi;
+use utoipa_scalar::{Scalar, Servable};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -14,38 +13,55 @@ pub struct AppState {
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        issues::list_issues,
-        issues::create_issue,
-    ),
-    components(
-        schemas(crate::models::issue::Issue, crate::models::issue::CreateIssueDto)
+        health_check,
+        ping
     ),
     tags(
-        (name = "issues", description = "Bug Issues management API")
+        (name = "health", description = "Health check endpoints")
     )
 )]
-pub struct ApiDoc;
+struct ApiDoc;
 
 pub async fn serve(pool: SqlitePool, port: u16) {
     let state = AppState { db: pool };
 
     let app = Router::new()
-        .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
-        .nest("/api/issues", issues::router())
+        .merge(Scalar::with_url("/scalar", ApiDoc::openapi()))
+        .route("/health", get(health_check))
+        .route("/ping", get(ping))
         .with_state(state);
 
-    let addr = format!("0.0.0.0:{}", port);
-    let listener = match TcpListener::bind(&addr).await {
-        Ok(l) => l,
-        Err(e) => {
-            eprintln!("Failed to bind Axum server on port {}: {}", port, e);
-            return;
-        }
-    };
-    
-    println!("API Server and Swagger UI running on http://{}/swagger-ui", addr);
-    
-    if let Err(e) = axum::serve(listener, app).await {
-        eprintln!("Axum server error: {}", e);
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
+    println!("API Server running on http://{}", addr);
+
+    if let Ok(listener) = TcpListener::bind(addr).await {
+        let _ = axum::serve(listener, app).await;
+    } else {
+        eprintln!("Failed to bind to port {}", port);
     }
+}
+
+#[utoipa::path(
+    get,
+    path = "/health",
+    responses(
+        (status = 200, description = "Returns health status of the API")
+    )
+)]
+async fn health_check() -> impl IntoResponse {
+    Json(serde_json::json!({
+        "status": "ok",
+        "service": "kbm-backend"
+    }))
+}
+
+#[utoipa::path(
+    get,
+    path = "/ping",
+    responses(
+        (status = 200, description = "Returns pong")
+    )
+)]
+async fn ping() -> &'static str {
+    "pong"
 }

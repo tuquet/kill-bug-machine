@@ -18,10 +18,5 @@ pub async fn init_db(app_dir: PathBuf) -> Result<SqlitePool, sqlx::Error> {
         .connect_with(options)
         .await?;
         
-    // Embed migrations and run them automatically
-    sqlx::migrate!("./migrations")
-        .run(&pool)
-        .await?;
-        
     Ok(pool)
 }

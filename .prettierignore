@@ -1,8 +1,5 @@
 node_modules
 dist
-build
-.next
 target
-.turbo
-coverage
+.vitepress/cache
 pnpm-lock.yaml

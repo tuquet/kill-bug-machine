@@ -8,7 +8,7 @@
     // TypeScript 7 Native
     "ms-vscode.vscode-typescript-native-preview",
 
-    // Tailwind CSS
+    // Tailwind CSS (required by shadcn/ui)
     "bradlc.vscode-tailwindcss",
 
     // Rust

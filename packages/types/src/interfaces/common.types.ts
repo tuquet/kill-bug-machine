@@ -23,13 +23,6 @@ export interface Comment {
   updatedAt: string;
 }
 
-export interface RepositoryInfo {
-  name: string;
-  owner: string;
-  url: string;
-  platform: import('../enums/bug-source.enum').BugSource;
-}
-
 export interface PaginationParams {
   limit: number;
   offset: number;

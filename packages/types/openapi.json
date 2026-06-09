@@ -1,0 +1,319 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "kill-bug-machine",
+    "description": "Cross-platform Desktop DevTool — Crawl, manage, and expose bugs via MCP",
+    "contact": {
+      "name": "KBM Team"
+    },
+    "license": {
+      "name": ""
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/issues": {
+      "get": {
+        "tags": ["issues"],
+        "operationId": "list_issues",
+        "responses": {
+          "200": {
+            "description": "List all issues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Issue"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["issues"],
+        "operationId": "create_issue",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIssueDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Issue created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Issue"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/issues/batch": {
+      "post": {
+        "tags": ["issues"],
+        "operationId": "batch_create_issues",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CreateIssueDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Batch accepted for processing"
+          }
+        }
+      }
+    },
+    "/api/issues/{id}": {
+      "get": {
+        "tags": ["issues"],
+        "operationId": "get_issue",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Issue ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get issue by ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Issue"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Issue not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["issues"],
+        "operationId": "update_issue",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Issue ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIssueDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Issue updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Issue"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Issue not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["issues"],
+        "operationId": "delete_issue",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Issue ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Issue deleted successfully"
+          },
+          "404": {
+            "description": "Issue not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateIssueDto": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "actual_behavior": {
+            "type": ["string", "null"]
+          },
+          "assignee": {
+            "type": ["string", "null"]
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "expected_behavior": {
+            "type": ["string", "null"]
+          },
+          "metadata": {
+            "type": ["string", "null"]
+          },
+          "priority": {
+            "type": ["string", "null"]
+          },
+          "reproduce_steps": {
+            "type": ["string", "null"]
+          },
+          "source_id": {
+            "type": ["string", "null"]
+          },
+          "source_name": {
+            "type": ["string", "null"]
+          },
+          "source_url": {
+            "type": ["string", "null"]
+          },
+          "tags": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "Issue": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "priority",
+          "tags",
+          "is_verified",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "actual_behavior": {
+            "type": ["string", "null"]
+          },
+          "ai_analysis": {
+            "type": ["string", "null"]
+          },
+          "assignee": {
+            "type": ["string", "null"]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "expected_behavior": {
+            "type": ["string", "null"]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "is_verified": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "type": ["string", "null"]
+          },
+          "priority": {
+            "type": "string"
+          },
+          "reproduce_steps": {
+            "type": ["string", "null"]
+          },
+          "resolution_reason": {
+            "type": ["string", "null"]
+          },
+          "source_id": {
+            "type": ["string", "null"]
+          },
+          "source_name": {
+            "type": ["string", "null"]
+          },
+          "source_url": {
+            "type": ["string", "null"]
+          },
+          "status": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "verified_at": {
+            "type": ["string", "null"],
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "issues",
+      "description": "Bug Issues management API"
+    }
+  ]
+}
