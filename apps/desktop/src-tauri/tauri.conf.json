@@ -10,7 +10,6 @@
     "frontendDist": "../web/dist"
   },
   "app": {
-    "title": "Kill Bug Machine",
     "windows": [
       {
         "title": "Kill Bug Machine",
