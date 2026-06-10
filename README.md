@@ -27,23 +27,27 @@ A production-ready monorepo boilerplate for building cross-platform desktop appl
 Để bắt đầu, bạn cần cài đặt môi trường Rust GNU. Bạn không cần quyền Admin hay cài Visual Studio cồng kềnh.
 
 1. **Cài đặt Scoop** (nếu chưa có):
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 ```
 
 2. **Cài đặt Node.js, pnpm, MinGW & Rustup**:
+
 ```powershell
 scoop install nodejs pnpm mingw rustup
 ```
 
 3. **Cấu hình Rust sang target GNU**:
+
 ```powershell
 rustup default stable-x86_64-pc-windows-gnu
 rustup target add x86_64-pc-windows-gnu
 ```
 
 4. **Kiểm tra môi trường**:
+
 ```powershell
 node -v
 pnpm -v
@@ -122,6 +126,7 @@ pnpm --filter @kbm/desktop tauri build  # Build desktop installer (.exe/.msi)
 **Nguyên nhân:** Cổng 1420 (Vite) đang bị kẹt bởi một process Node khác.
 
 **Fix (PowerShell):**
+
 ```powershell
 Get-Process -Id (Get-NetTCPConnection -LocalPort 1420 -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue | Stop-Process -Force
 ```
@@ -131,6 +136,7 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 1420 -ErrorAction SilentlyConti
 **Nguyên nhân:** Máy chưa có trình duyệt nhúng Edge WebView2 Runtime.
 
 **Fix:**
+
 ```powershell
 scoop install webview2-runtime
 ```

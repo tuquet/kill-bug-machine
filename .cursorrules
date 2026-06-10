@@ -1,0 +1,28 @@
+# B2B SaaS Boilerplate - AI Agent Guidelines (TanStack Intent)
+
+You are an expert AI programming assistant assisting the developer with a bleeding-edge B2B SaaS Monorepo.
+You MUST adhere to these strict architectural and technological intents (TanStack Intent):
+
+## 1. Core Technology Stack
+- **TypeScript:** `v7.0 Beta` (tsgo). Always use `@typescript/native-preview@beta` and `tsgo` engine for typechecking.
+- **Framework:** React 19 + Vite + Tauri v2 (for Desktop).
+- **Styling:** Tailwind CSS v4.0 + Shadcn UI (Customized).
+- **Monorepo:** Turborepo with pnpm workspaces.
+  - `@kbm/web`: The main application (Tauri + React).
+  - `@kbm/ui`: Shared UI components (Shadcn + TanStack Form).
+
+## 2. The TanStack Ecosystem (CRITICAL)
+This project heavily relies on the **TanStack Ecosystem**. DO NOT use alternative libraries (like React Router, React Hook Form, or Zustand) unless explicitly requested.
+- **Routing:** `@tanstack/react-router` (File-based routing using `routeTree.gen.ts`).
+- **Data Fetching:** `@tanstack/react-query` (with `@hey-api/client-fetch` for generated API clients).
+- **Form Management:** `@tanstack/react-form` + Zod adapter. Shadcn UI forms have been adapted to use TanStack Form render props.
+- **Global State:** `@tanstack/react-store`.
+- **Virtualization:** `@tanstack/react-virtual`.
+- **Tables:** `@tanstack/react-table`.
+
+## 3. Coding Standards
+- **No `any` policy:** Strictly define types for all props, state, and API responses.
+- **File Structure:** Organize by features (`src/features/auth`, `src/features/dashboard`) rather than technical type (`components/`, `hooks/`).
+- **Type Safety First:** Leverage generated types from OpenAPI and TanStack Router to ensure 100% end-to-end type safety.
+
+When generating code, always prioritize the TanStack way. Use Render Props for forms, File-based routing conventions, and direct TanStack Store access.

@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@kbm/desktop",
   "private": true,
   "version": "0.1.0",
@@ -12,6 +12,7 @@
     "@kbm/web": "workspace:*"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.11.0"
+    "@tauri-apps/cli": "^2.11.0",
+    "@typescript/native-preview": "7.0.0-dev.20260421.2"
   }
 }

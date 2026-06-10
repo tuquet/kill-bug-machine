@@ -1,9 +1,12 @@
-{
+﻿{
   "name": "@kbm/config",
   "version": "0.1.0",
   "private": true,
   "exports": {
     "./eslint": "./eslint/index.mjs",
     "./prettier": "./prettier/index.mjs"
+  },
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260421.2"
   }
 }
