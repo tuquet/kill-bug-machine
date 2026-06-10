@@ -1,5 +1,6 @@
-﻿import { Separator } from '@kbm/ui';
+import { Separator } from '@kbm/ui';
 import { SidebarTrigger } from '@kbm/ui';
+import { UpdaterButton } from '@/features/core/components/updater-button';
 
 export function SiteHeader() {
   return (
@@ -7,7 +8,9 @@ export function SiteHeader() {
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ms-1" />
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
-        <h1 className="text-base font-medium">Documents</h1>
+        <h1 className="text-base font-medium">Bảng Điều Khiển</h1>
+        <div className="flex-1" />
+        <UpdaterButton />
       </div>
     </header>
   );

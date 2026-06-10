@@ -8,7 +8,15 @@ import { routeTree } from './routeTree.gen';
 import './app/globals.css';
 
 // Create a new router instance
-const router = createRouter({ routeTree });
+import { useStore } from '@tanstack/react-store';
+import { authStore } from '@/features/auth/stores/use-auth-store';
+
+const router = createRouter({
+  routeTree,
+  context: {
+    auth: undefined!, // We'll provide it in the RouterProvider
+  },
+});
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -21,10 +29,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
 export default function App() {
+  const auth = useStore(authStore);
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} context={{ auth }} />
       </TooltipProvider>
       <ReactQueryDevtools initialIsOpen={false} />
       <TanStackRouterDevtools router={router} position="bottom-right" />

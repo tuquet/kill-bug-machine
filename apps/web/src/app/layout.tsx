@@ -1,6 +1,6 @@
-﻿import { Outlet } from 'react-router';
-import { AppSidebar } from '@/components/app-sidebar';
-import { SiteHeader } from '@/components/site-header';
+import { Outlet } from '@tanstack/react-router';
+import { AppSidebar } from '@/features/core/components/app-sidebar';
+import { SiteHeader } from '@/features/core/components/site-header';
 import { SidebarInset, SidebarProvider } from '@kbm/ui';
 
 export function AppLayout() {

@@ -15,7 +15,7 @@ interface CanProps {
 }
 
 export function Can({ role, children, fallback = null }: CanProps) {
-  const currentRole = useStore(authStore, (state) => state.role);
+  const currentRole = useStore(authStore, (state: any) => state.role as Role);
 
   const hasAccess = ROLE_HIERARCHY[currentRole] >= ROLE_HIERARCHY[role];
 

@@ -11,6 +11,8 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .setup(|app| {
             let app_handle = app.handle().clone();
             
@@ -22,8 +24,8 @@ pub fn run() {
                             // Manage state for Tauri commands
                             app_handle.manage(pool.clone());
                             
-                            // Start Axum REST API and Swagger UI on port 8080
-                            api::serve(pool, 8080).await;
+                            // Start Axum REST API and Swagger UI on port 1421
+                            api::serve(pool, 1421).await;
                         } else {
                             eprintln!("Failed to initialize database");
                         }
