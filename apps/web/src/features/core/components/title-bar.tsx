@@ -53,10 +53,7 @@ export function TitleBar() {
   };
 
   return (
-    <div
-      className="flex h-8 shrink-0 items-center border-b bg-background select-none"
-      data-tauri-drag-region
-    >
+    <div className="flex h-8 shrink-0 items-center border-b bg-background select-none">
       {/* App icon + Menubar */}
       <div className="flex items-center">
         <div className="flex h-8 w-10 items-center justify-center">

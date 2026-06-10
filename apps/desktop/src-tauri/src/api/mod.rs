@@ -27,6 +27,7 @@ pub async fn serve(pool: SqlitePool, port: u16) {
     let state = AppState { db: pool };
 
     let app = Router::new()
+        .route("/", get(|| async { axum::response::Redirect::temporary("/scalar") }))
         .merge(Scalar::with_url("/scalar", ApiDoc::openapi()))
         .route("/health", get(health_check))
         .route("/ping", get(ping))
