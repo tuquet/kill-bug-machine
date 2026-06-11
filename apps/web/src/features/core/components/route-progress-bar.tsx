@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useRouterState } from '@tanstack/react-router';
+import { isTauri } from '@tauri-apps/api/core';
 import { cn } from '@kbm/ui';
 import { TITLE_BAR_HEIGHT, PROGRESS_BAR_HEIGHT, PROGRESS_BAR_Z } from '@/config';
 
@@ -39,6 +40,8 @@ export function RouteProgressBar() {
 
   if (!visible) return null;
 
+  const topOffset = isTauri() ? TITLE_BAR_HEIGHT : 0;
+
   return (
     <div
       className={cn(
@@ -46,7 +49,7 @@ export function RouteProgressBar() {
         progress === 100 ? 'opacity-0' : 'opacity-100'
       )}
       style={{
-        top: `${TITLE_BAR_HEIGHT}px`,
+        top: `${topOffset}px`,
         height: `${PROGRESS_BAR_HEIGHT}px`,
         zIndex: PROGRESS_BAR_Z,
       }}

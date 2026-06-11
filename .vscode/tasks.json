@@ -63,23 +63,6 @@
         "group": "dev"
       }
     },
-    {
-      "label": "⚙️ Dev: Backend API (Axum)",
-      "type": "shell",
-      "command": "cargo run",
-      "options": {
-        "cwd": "${workspaceFolder}/apps/desktop/src-tauri"
-      },
-      "group": "build",
-      "isBackground": true,
-      "problemMatcher": "$rustc",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "group": "dev"
-      }
-    },
-
     // ==========================================
     // === Type Checking
     // ==========================================
