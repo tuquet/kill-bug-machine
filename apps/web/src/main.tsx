@@ -1,14 +1,14 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { isTauri } from '@tauri-apps/api/core';
+import { isDesktop } from '@/utils/platform';
 import './lib/i18n';
 import { initConsoleHijacker } from './stores/use-console-store';
 
 initConsoleHijacker();
 
 // Prevent zoom in Tauri to preserve fixed frameless window layout
-if (isTauri()) {
+if (isDesktop()) {
   document.addEventListener(
     'wheel',
     (e) => {

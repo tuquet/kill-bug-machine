@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { isTauri } from '@tauri-apps/api/core';
+import { isDesktop } from '@/utils/platform';
 import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { Button } from '@kbm/ui';
@@ -54,7 +54,7 @@ export function UpdaterButton() {
     }
   }
 
-  if (!isTauri()) {
+  if (!isDesktop()) {
     return null;
   }
 

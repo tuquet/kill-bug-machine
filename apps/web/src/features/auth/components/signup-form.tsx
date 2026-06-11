@@ -1,7 +1,7 @@
 import { cn } from '@kbm/ui';
 import { Link } from '@tanstack/react-router';
 import { toast } from 'sonner'
-import { isTauri } from '@tauri-apps/api/core'
+import { isDesktop } from '@/utils/platform'
 import { openUrl } from '@tauri-apps/plugin-opener';
 import {
   Button,
@@ -27,13 +27,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
     // with state=desktop. The Web platform will then bounce it back to the Desktop app via deep link.
     const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:1420';
     const redirectUri = `${webUrl}/auth/callback`;
-    const state = isTauri() ? 'desktop' : 'web';
+    const state = isDesktop() ? 'desktop' : 'web';
       
     const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user&state=${state}`;
     
     // In Tauri desktop app, open in system browser to avoid replacing the app webview
     // which would destroy the custom TitleBar and window controls.
-    if (isTauri()) {
+    if (isDesktop()) {
       await openUrl(url);
     } else {
       window.location.href = url;

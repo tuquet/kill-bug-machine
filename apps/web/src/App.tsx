@@ -14,7 +14,7 @@ import './app/globals.css';
 import { useStore } from '@tanstack/react-store';
 import { authStore, authActions } from '@/features/auth/stores/use-auth-store';
 import { useEffect } from 'react';
-import { isTauri } from '@tauri-apps/api/core';
+import { isDesktop } from '@/utils/platform';
 import { onOpenUrl } from '@tauri-apps/plugin-deep-link';
 import { toast } from 'sonner';
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/route-config';
@@ -41,7 +41,7 @@ export default function App() {
 
   // Handle OAuth Deep Links in Tauri Desktop App
   useEffect(() => {
-    if (!isTauri()) return;
+    if (!isDesktop()) return;
 
     let unlisten: () => void;
     

@@ -1,4 +1,4 @@
-import { isTauri } from '@tauri-apps/api/core';
+import { isDesktop } from '@/utils/platform';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { LogicalSize } from '@tauri-apps/api/dpi';
 import { openUrl } from '@tauri-apps/plugin-opener';
@@ -28,7 +28,7 @@ export function TitleBar() {
   const { i18n } = useTranslation();
 
 
-  if (!isTauri()) return null;
+  if (!isDesktop()) return null;
 
   const openExternal = (url: string) => openUrl(url);
 

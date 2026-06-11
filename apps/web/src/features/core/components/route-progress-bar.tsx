@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRouterState } from '@tanstack/react-router';
-import { isTauri } from '@tauri-apps/api/core';
+import { isDesktop } from '@/utils/platform';
 import { cn } from '@kbm/ui';
 import { TITLE_BAR_HEIGHT, PROGRESS_BAR_HEIGHT, PROGRESS_BAR_Z } from '@/config';
 
@@ -40,7 +40,7 @@ export function RouteProgressBar() {
 
   if (!visible) return null;
 
-  const topOffset = isTauri() ? TITLE_BAR_HEIGHT : 0;
+  const topOffset = isDesktop() ? TITLE_BAR_HEIGHT : 0;
 
   return (
     <div

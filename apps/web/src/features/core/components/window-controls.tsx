@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { isTauri } from '@tauri-apps/api/core';
+import { isDesktop } from '@/utils/platform';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { Minus, Square, X, Copy } from 'lucide-react';
 
@@ -7,7 +7,7 @@ export function WindowControls() {
   const [isMaximized, setIsMaximized] = useState(false);
 
   useEffect(() => {
-    if (!isTauri()) return;
+    if (!isDesktop()) return;
 
     const appWindow = getCurrentWindow();
     const unlisten = appWindow.onResized(async () => {
@@ -22,7 +22,7 @@ export function WindowControls() {
     };
   }, []);
 
-  if (!isTauri()) return null;
+  if (!isDesktop()) return null;
 
   const appWindow = getCurrentWindow();
 

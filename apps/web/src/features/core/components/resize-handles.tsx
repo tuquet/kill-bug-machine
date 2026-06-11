@@ -1,4 +1,4 @@
-import { isTauri } from '@tauri-apps/api/core';
+import { isDesktop } from '@/utils/platform';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 
 /**
@@ -28,7 +28,7 @@ const zones: { direction: ResizeDirection; style: React.CSSProperties; cursor: s
 ];
 
 export function ResizeHandles() {
-  if (!isTauri()) return null;
+  if (!isDesktop()) return null;
 
   return (
     <>
