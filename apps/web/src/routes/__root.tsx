@@ -8,6 +8,8 @@ import { useDevStore } from '@/stores/use-dev-store';
 import type { AuthState } from '@/features/auth/stores/use-auth-store';
 import { Button } from '@kbm/ui';
 import { ArrowLeft, Ghost } from 'lucide-react';
+import { TitleBar } from '@/features/core/components/title-bar';
+import { ResizeHandles } from '@/features/core/components/resize-handles';
 
 interface MyRouterContext {
   auth: AuthState;
@@ -15,7 +17,7 @@ interface MyRouterContext {
 
 function NotFound() {
   return (
-    <div className="relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden bg-background px-6 py-12">
+    <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden bg-background px-6 py-12">
       {/* Subtle animated background grid */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--muted)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted)/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,black_40%,transparent_100%)]" />
 
@@ -78,7 +80,13 @@ function RootComponent() {
     }
   }, [setDevMode]);
 
-  return <Outlet />;
+  return (
+    <div className="relative flex h-screen flex-col">
+      <ResizeHandles />
+      <TitleBar />
+      <Outlet />
+    </div>
+  );
 }
 
 import { DefaultErrorFallback } from '@/components/error-boundary';

@@ -1,8 +1,6 @@
 import { Outlet, useRouterState } from '@tanstack/react-router';
 import { AppSidebar } from '@/features/core/components/app-sidebar';
 import { SiteHeader } from '@/features/core/components/site-header';
-import { TitleBar } from '@/features/core/components/title-bar';
-import { ResizeHandles } from '@/features/core/components/resize-handles';
 import { RouteProgressBar } from '@/features/core/components/route-progress-bar';
 import { SidebarInset, SidebarProvider } from '@kbm/ui';
 import { SIDEBAR_WIDTH, HEADER_HEIGHT } from '@/config';
@@ -12,9 +10,7 @@ export function AppLayout() {
   const currentPath = routerState.location.pathname;
 
   return (
-    <div className="relative flex h-screen flex-col">
-      <ResizeHandles />
-      <TitleBar />
+    <>
       <RouteProgressBar />
       <SidebarProvider
         style={
@@ -35,6 +31,6 @@ export function AppLayout() {
           </div>
         </SidebarInset>
       </SidebarProvider>
-    </div>
+    </>
   );
 }

@@ -1,9 +1,12 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { ForgotPasswordForm } from '@/features/auth/components/forgot-password-form';
 
+import { authStore } from '@/features/auth/stores/use-auth-store';
+
 export const Route = createFileRoute('/forgot-password')({
-  beforeLoad: ({ context }) => {
-    const hasLoggedIn = !!context.auth.token || !!context.auth.displayName;
+  beforeLoad: () => {
+    const auth = authStore.state;
+    const hasLoggedIn = !!auth.token || !!auth.displayName;
     if (hasLoggedIn) {
       throw redirect({ to: '/dashboard' });
     }
@@ -13,7 +16,7 @@ export const Route = createFileRoute('/forgot-password')({
 
 function ForgotPasswordPage() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
         <ForgotPasswordForm />
       </div>
