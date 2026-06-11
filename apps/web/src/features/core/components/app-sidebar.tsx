@@ -30,17 +30,40 @@ import {
 import { useRBAC } from '@/hooks/use-rbac';
 import { useDevStore } from '@/stores/use-dev-store';
 import { useTranslation } from 'react-i18next';
+import { useStore } from '@tanstack/react-store';
+import { launcherStore } from '@/features/launcher/stores/use-launcher-store';
+import { Blocks } from 'lucide-react';
 
 const AppSidebarInner = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   const { can, filterNav } = useRBAC();
   const { isDevMode } = useDevStore();
   const { t } = useTranslation();
 
-  const mainItems = filterNav(NAV_MAIN);
+  const { installedApps } = useStore(launcherStore);
+
+  // Filter NAV_MAIN by launcher installed apps first
+  const launcherFilteredMainNav = NAV_MAIN.filter(item => {
+    const appId = item.url.replace('/', '');
+    return installedApps.includes(appId);
+  });
+
+  const mainItems = filterNav(launcherFilteredMainNav);
   const showcaseItems = filterNav(NAV_SHOWCASE.items);
   const errorItems = filterNav(NAV_ERROR_PAGES.items);
-  const secondaryItems = filterNav(NAV_SECONDARY);
+  
+  // Inject the App Launcher into the secondary items dynamically
+  const launcherItem = {
+    title: 'App Launcher',
+    url: '/launcher',
+    icon: Blocks,
+  };
+  const secondaryItems = [launcherItem, ...filterNav(NAV_SECONDARY)];
+  
   const documentItems = filterNav(NAV_DOCUMENTS);
+
+  const hasShowcase = installedApps.includes('showcase');
+  const hasErrorPages = installedApps.includes('error-pages');
+  const hasDocuments = installedApps.includes('documents');
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -66,7 +89,7 @@ const AppSidebarInner = ({ ...props }: React.ComponentProps<typeof Sidebar>) => 
         />
 
         {/* Component Showcase — only if user can see the group and in Dev Mode */}
-        {isDevMode && can(NAV_SHOWCASE.requiredPermission) && showcaseItems.length > 0 && (
+        {hasShowcase && isDevMode && can(NAV_SHOWCASE.requiredPermission) && showcaseItems.length > 0 && (
           <SidebarGroup>
             <SidebarGroupLabel>{t(`nav.${NAV_SHOWCASE.label}`, NAV_SHOWCASE.label)}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -87,7 +110,7 @@ const AppSidebarInner = ({ ...props }: React.ComponentProps<typeof Sidebar>) => 
         )}
 
         {/* Error Pages — only if user can see the group and in Dev Mode */}
-        {isDevMode && can(NAV_ERROR_PAGES.requiredPermission) && errorItems.length > 0 && (
+        {hasErrorPages && isDevMode && can(NAV_ERROR_PAGES.requiredPermission) && errorItems.length > 0 && (
           <SidebarGroup>
             <SidebarGroupLabel>{t(`nav.${NAV_ERROR_PAGES.label}`, NAV_ERROR_PAGES.label)}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -107,7 +130,7 @@ const AppSidebarInner = ({ ...props }: React.ComponentProps<typeof Sidebar>) => 
           </SidebarGroup>
         )}
 
-        {isDevMode && (
+        {hasDocuments && documentItems.length > 0 && (
           <NavDocuments
             items={documentItems.map((d) => ({
               name: d.name,

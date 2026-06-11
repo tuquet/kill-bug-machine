@@ -33,6 +33,9 @@ const AuthenticatedProjectsLazyRouteImport = createFileRoute(
 const AuthenticatedLifecycleLazyRouteImport = createFileRoute(
   '/_authenticated/lifecycle',
 )()
+const AuthenticatedLauncherLazyRouteImport = createFileRoute(
+  '/_authenticated/launcher',
+)()
 const AuthenticatedDashboardLazyRouteImport = createFileRoute(
   '/_authenticated/dashboard',
 )()
@@ -138,6 +141,14 @@ const AuthenticatedLifecycleLazyRoute =
   } as any).lazy(() =>
     import('./routes/_authenticated/lifecycle.lazy').then((d) => d.Route),
   )
+const AuthenticatedLauncherLazyRoute =
+  AuthenticatedLauncherLazyRouteImport.update({
+    id: '/launcher',
+    path: '/launcher',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/launcher.lazy').then((d) => d.Route),
+  )
 const AuthenticatedDashboardLazyRoute =
   AuthenticatedDashboardLazyRouteImport.update({
     id: '/dashboard',
@@ -242,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
   '/analytics': typeof AuthenticatedAnalyticsLazyRoute
   '/dashboard': typeof AuthenticatedDashboardLazyRoute
+  '/launcher': typeof AuthenticatedLauncherLazyRoute
   '/lifecycle': typeof AuthenticatedLifecycleLazyRoute
   '/projects': typeof AuthenticatedProjectsLazyRoute
   '/team': typeof AuthenticatedTeamLazyRoute
@@ -267,6 +279,7 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
   '/analytics': typeof AuthenticatedAnalyticsLazyRoute
   '/dashboard': typeof AuthenticatedDashboardLazyRoute
+  '/launcher': typeof AuthenticatedLauncherLazyRoute
   '/lifecycle': typeof AuthenticatedLifecycleLazyRoute
   '/projects': typeof AuthenticatedProjectsLazyRoute
   '/team': typeof AuthenticatedTeamLazyRoute
@@ -294,6 +307,7 @@ export interface FileRoutesById {
   '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsLazyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardLazyRoute
+  '/_authenticated/launcher': typeof AuthenticatedLauncherLazyRoute
   '/_authenticated/lifecycle': typeof AuthenticatedLifecycleLazyRoute
   '/_authenticated/projects': typeof AuthenticatedProjectsLazyRoute
   '/_authenticated/team': typeof AuthenticatedTeamLazyRoute
@@ -321,6 +335,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/analytics'
     | '/dashboard'
+    | '/launcher'
     | '/lifecycle'
     | '/projects'
     | '/team'
@@ -346,6 +361,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/analytics'
     | '/dashboard'
+    | '/launcher'
     | '/lifecycle'
     | '/projects'
     | '/team'
@@ -372,6 +388,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/_authenticated/analytics'
     | '/_authenticated/dashboard'
+    | '/_authenticated/launcher'
     | '/_authenticated/lifecycle'
     | '/_authenticated/projects'
     | '/_authenticated/team'
@@ -499,6 +516,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLifecycleLazyRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/launcher': {
+      id: '/_authenticated/launcher'
+      path: '/launcher'
+      fullPath: '/launcher'
+      preLoaderRoute: typeof AuthenticatedLauncherLazyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -575,6 +599,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAnalyticsLazyRoute: typeof AuthenticatedAnalyticsLazyRoute
   AuthenticatedDashboardLazyRoute: typeof AuthenticatedDashboardLazyRoute
+  AuthenticatedLauncherLazyRoute: typeof AuthenticatedLauncherLazyRoute
   AuthenticatedLifecycleLazyRoute: typeof AuthenticatedLifecycleLazyRoute
   AuthenticatedProjectsLazyRoute: typeof AuthenticatedProjectsLazyRoute
   AuthenticatedTeamLazyRoute: typeof AuthenticatedTeamLazyRoute
@@ -590,6 +615,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAnalyticsLazyRoute: AuthenticatedAnalyticsLazyRoute,
   AuthenticatedDashboardLazyRoute: AuthenticatedDashboardLazyRoute,
+  AuthenticatedLauncherLazyRoute: AuthenticatedLauncherLazyRoute,
   AuthenticatedLifecycleLazyRoute: AuthenticatedLifecycleLazyRoute,
   AuthenticatedProjectsLazyRoute: AuthenticatedProjectsLazyRoute,
   AuthenticatedTeamLazyRoute: AuthenticatedTeamLazyRoute,
