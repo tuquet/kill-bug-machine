@@ -3,7 +3,9 @@ import { LoginForm } from '@/features/auth/components/login-form';
 
 export const Route = createFileRoute('/login')({
   beforeLoad: ({ context }) => {
-    if (context.auth.role !== 'GUEST') {
+    // Redirect away from login if already authenticated (any method)
+    const hasLoggedIn = !!context.auth.token || !!context.auth.displayName;
+    if (hasLoggedIn) {
       throw redirect({
         to: '/dashboard',
       });

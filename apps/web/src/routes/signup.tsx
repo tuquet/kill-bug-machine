@@ -3,7 +3,8 @@ import { SignupForm } from '@/features/auth/components/signup-form';
 
 export const Route = createFileRoute('/signup')({
   beforeLoad: ({ context }) => {
-    if (context.auth.role !== 'GUEST') {
+    const hasLoggedIn = !!context.auth.token || !!context.auth.displayName;
+    if (hasLoggedIn) {
       throw redirect({
         to: '/dashboard',
       });

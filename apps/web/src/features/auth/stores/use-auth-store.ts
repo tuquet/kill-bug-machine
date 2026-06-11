@@ -22,6 +22,7 @@ export const authActions = {
     authStore.setState(() => ({ role, token, displayName: displayName ?? null }));
   },
   loginAsGuest: () => {
+    localStorage.setItem('kbm-display-name', 'Guest');
     authStore.setState(() => ({ role: 'GUEST', token: null, displayName: 'Guest' }));
   },
   logout: () => {
