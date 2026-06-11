@@ -1,38 +1,38 @@
 const fs = require('fs');
 const path = require('path');
 
-function walkDir(dir, callback) {
-  fs.readdirSync(dir).forEach((f) => {
-    let dirPath = path.join(dir, f);
-    let isDirectory = fs.statSync(dirPath).isDirectory();
-    isDirectory ? walkDir(dirPath, callback) : callback(path.join(dir, f));
-  });
+const uiSrcDir = path.join(__dirname, 'packages', 'ui', 'src');
+
+function walkDir(dir) {
+  const results = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) results.push(...walkDir(fullPath));
+    else if (/\.(tsx?|jsx?)$/.test(entry.name)) results.push(fullPath);
+  }
+  return results;
 }
 
-const uiDir = path.join(__dirname, 'packages/ui/src');
+const files = walkDir(uiSrcDir);
+let totalFixed = 0;
 
-walkDir(uiDir, function (filePath) {
-  if (filePath.endsWith('.tsx') || filePath.endsWith('.ts')) {
-    let content = fs.readFileSync(filePath, 'utf8');
+for (const file of files) {
+  let content = fs.readFileSync(file, 'utf-8');
+  const original = content;
 
-    // determine relative depth from src
-    let relativeFromSrc = path.relative(uiDir, path.dirname(filePath));
-    let depth = relativeFromSrc === '' ? 0 : relativeFromSrc.split(path.sep).length;
+  // Replace @/xxx imports with relative paths
+  content = content.replace(/from ["']@\/(.*?)["']/g, (match, importPath) => {
+    const fileDir = path.dirname(file);
+    const targetPath = path.join(uiSrcDir, importPath);
+    let relativePath = path.relative(fileDir, targetPath).replace(/\\/g, '/');
+    if (!relativePath.startsWith('.')) relativePath = './' + relativePath;
+    return `from "${relativePath}"`;
+  });
 
-    let prefix = depth === 0 ? './' : '../'.repeat(depth);
-
-    let changed = false;
-
-    let newContent = content.replace(/@\/components\/ui\//g, prefix + 'components/ui/');
-    newContent = newContent.replace(/@\/lib\/utils/g, prefix + 'lib/utils');
-    newContent = newContent.replace(/@\/hooks\/use-mobile/g, prefix + 'hooks/use-mobile');
-    newContent = newContent.replace(/@\/components\/ui/g, prefix + 'components/ui');
-
-    // Edge case if depth was 0, we might get `./components/ui/button` but maybe we want to keep it simple.
-
-    if (content !== newContent) {
-      fs.writeFileSync(filePath, newContent, 'utf8');
-      console.log('Fixed imports in ' + filePath);
-    }
+  if (content !== original) {
+    fs.writeFileSync(file, content);
+    totalFixed++;
+    console.log('Fixed:', path.relative(__dirname, file));
   }
-});
+}
+console.log('Total files fixed:', totalFixed);

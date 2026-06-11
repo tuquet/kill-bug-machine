@@ -15,7 +15,7 @@ client.setConfig({
 
 // ─── Request Interceptor: Auto-attach Bearer Token ─────────────────────────────
 
-client.interceptors.request.use((request: any) => {
+client.interceptors.request.use((request: Request) => {
   const token = localStorage.getItem('kbm-auth-token');
 
   if (token && request.headers) {
@@ -63,7 +63,7 @@ function showApiErrors(errors: ApiError[]) {
 
 // ─── Response Interceptor: Centralized Error Handling ──────────────────────────
 
-client.interceptors.response.use(async (response: any) => {
+client.interceptors.response.use(async (response: Response) => {
   if (response.ok) return response;
 
   // Try to parse response body as ApiResponse

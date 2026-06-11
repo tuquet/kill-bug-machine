@@ -1,6 +1,5 @@
 import { useAuth } from '@/features/auth/stores/use-auth-store';
 import { hasPermission, RBAC_ENABLED, type Permission } from '@/config/rbac';
-import type { Role } from '@/features/auth/stores/use-auth-store';
 
 /**
  * Hook that provides RBAC-aware helpers for the current user.

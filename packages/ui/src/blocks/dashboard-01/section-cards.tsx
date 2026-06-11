@@ -1,4 +1,4 @@
-import { Badge } from "@kbm/ui/src/components/ui/badge"
+import { Badge } from "../../components/ui/badge"
 import {
   Card,
   CardAction,
@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@kbm/ui/src/components/ui/card"
+} from "../../components/ui/card"
 import { TrendingUpIcon, TrendingDownIcon } from "lucide-react"
 
 export function SectionCards() {

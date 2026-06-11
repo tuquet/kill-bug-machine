@@ -7,7 +7,6 @@ import {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  BreadcrumbEllipsis,
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,

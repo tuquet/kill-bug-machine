@@ -23,11 +23,9 @@ export function UpdaterButton() {
               const toastId = toast.loading('Downloading update...');
               try {
                 let downloaded = 0;
-                let contentLength = 0;
                 await update.downloadAndInstall((event) => {
                   switch (event.event) {
                     case 'Started':
-                      contentLength = event.data.contentLength || 0;
                       break;
                     case 'Progress':
                       downloaded += event.data.chunkLength;

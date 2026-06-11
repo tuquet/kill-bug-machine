@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
-import { useIsMobile } from "@kbm/ui/src/hooks/use-mobile"
+import { useIsMobile } from "../../hooks/use-mobile"
 import {
   Card,
   CardAction,
@@ -9,24 +9,24 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@kbm/ui/src/components/ui/card"
+} from "../../components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@kbm/ui/src/components/ui/chart"
+} from "../../components/ui/chart"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@kbm/ui/src/components/ui/select"
+} from "../../components/ui/select"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@kbm/ui/src/components/ui/toggle-group"
+} from "../../components/ui/toggle-group"
 
 export const description = "An interactive area chart"
 

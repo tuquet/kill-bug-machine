@@ -15,7 +15,7 @@ export interface ConsoleState {
   unreadCount: number;
 }
 
-const formatArgs = (args: any[]) => {
+const formatArgs = (args: unknown[]) => {
   return args
     .map((arg) => {
       if (typeof arg === 'object') {
@@ -39,7 +39,7 @@ export const consoleStore = new Store<ConsoleState>({
 });
 
 export const consoleActions = {
-  addLog: (level: LogLevel, args: any[]) => {
+  addLog: (level: LogLevel, args: unknown[]) => {
     const message = formatArgs(args);
     const newLog: LogEntry = {
       id: Math.random().toString(36).substring(2, 9),

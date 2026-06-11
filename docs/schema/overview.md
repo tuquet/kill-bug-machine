@@ -54,6 +54,39 @@ erDiagram
         timestamp createdAt
     }
 
+    COMMENT {
+        uuid id PK
+        uuid taskId FK
+        uuid authorId FK "Ref Profile.id"
+        text content
+        boolean isEdited
+        timestamp createdAt
+    }
+
+    ATTACHMENT {
+        uuid id PK
+        uuid uploaderId FK "Ref Profile.id"
+        uuid taskId FK
+        uuid commentId FK "Nullable"
+        string fileName
+        string fileUrl
+        int fileSize
+        string mimeType
+        timestamp createdAt
+    }
+
+    ACTIVITY_LOG {
+        uuid id PK
+        uuid actorId FK "Ref Profile.id"
+        string action
+        uuid projectId FK "Nullable"
+        uuid taskId FK "Nullable"
+        string oldValue
+        string newValue
+        jsonb metadata
+        timestamp createdAt
+    }
+
     NOTIFICATION {
         uuid id PK
         uuid userId FK "Ref Profile.id"
@@ -74,6 +107,17 @@ erDiagram
     PROJECT ||--o{ TASK : "contains"
     PROFILE ||--o{ TASK : "assigned to"
     PROFILE ||--o{ TASK : "reported by"
+    
+    TASK ||--o{ COMMENT : "has"
+    PROFILE ||--o{ COMMENT : "authors"
+    
+    TASK ||--o{ ATTACHMENT : "has"
+    COMMENT ||--o{ ATTACHMENT : "contains"
+    PROFILE ||--o{ ATTACHMENT : "uploads"
+    
+    TASK ||--o{ ACTIVITY_LOG : "generates"
+    PROJECT ||--o{ ACTIVITY_LOG : "generates"
+    PROFILE ||--o{ ACTIVITY_LOG : "performs"
     
     PROFILE ||--o{ NOTIFICATION : "receives"
     PROFILE ||--o{ NOTIFICATION : "triggers (actor)"

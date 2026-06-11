@@ -1,14 +1,14 @@
-import { cn } from "@kbm/ui/src/lib/utils"
-import { Button } from "@kbm/ui/src/components/ui/button"
-import { Card, CardContent } from "@kbm/ui/src/components/ui/card"
+import { cn } from "../../lib/utils"
+import { Button } from "../../components/ui/button"
+import { Card, CardContent } from "../../components/ui/card"
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@kbm/ui/src/components/ui/field"
-import { Input } from "@kbm/ui/src/components/ui/input"
+} from "../../components/ui/field"
+import { Input } from "../../components/ui/input"
 
 export function SignupForm({
   className,

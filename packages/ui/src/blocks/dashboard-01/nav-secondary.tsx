@@ -6,7 +6,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@kbm/ui/src/components/ui/sidebar"
+} from "../../components/ui/sidebar"
 
 export function NavSecondary({
   items,

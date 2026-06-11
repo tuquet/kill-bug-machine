@@ -160,7 +160,7 @@ function buildBreadcrumbMap(): Record<string, BreadcrumbEntry[]> {
   for (const item of NAV_SHOWCASE.items) {
     map[item.url] = [
       { label: 'Dashboard', url: '/dashboard' },
-      { label: NAV_SHOWCASE.label, url: NAV_SHOWCASE.items[0].url, siblings: showcaseSiblings },
+      { label: NAV_SHOWCASE.label, url: NAV_SHOWCASE.items[0]!.url, siblings: showcaseSiblings },
       { label: item.title, url: item.url },
     ];
   }
@@ -170,7 +170,7 @@ function buildBreadcrumbMap(): Record<string, BreadcrumbEntry[]> {
   for (const item of NAV_ERROR_PAGES.items) {
     map[item.url] = [
       { label: 'Dashboard', url: '/dashboard' },
-      { label: NAV_ERROR_PAGES.label, url: NAV_ERROR_PAGES.items[0].url, siblings: errorSiblings },
+      { label: NAV_ERROR_PAGES.label, url: NAV_ERROR_PAGES.items[0]!.url, siblings: errorSiblings },
       { label: item.title, url: item.url },
     ];
   }
@@ -190,7 +190,7 @@ function buildBreadcrumbMap(): Record<string, BreadcrumbEntry[]> {
   for (const doc of NAV_DOCUMENTS) {
     map[doc.url] = [
       { label: 'Dashboard', url: '/dashboard' },
-      { label: 'Documents', url: NAV_DOCUMENTS[0].url, siblings: docSiblings },
+      { label: 'Documents', url: NAV_DOCUMENTS[0]!.url, siblings: docSiblings },
       { label: doc.name, url: doc.url },
     ];
   }

@@ -5,6 +5,7 @@ import {
   flexRender,
   getSortedRowModel,
   SortingState,
+  type CellContext,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useQuery } from '@tanstack/react-query';
@@ -67,7 +68,7 @@ export function BugsTable() {
         header: 'Trạng thái (Status)',
         accessorKey: 'status',
         size: 150,
-        cell: (info: any) => {
+        cell: (info: CellContext<Bug, string>) => {
           const val = info.getValue();
           const colors = {
             Open: 'text-red-500 bg-red-500/10',

@@ -1,6 +1,5 @@
-import { Button } from "@kbm/ui/src/components/ui/button"
-import { Separator } from "@kbm/ui/src/components/ui/separator"
-import { SidebarTrigger } from "@kbm/ui/src/components/ui/sidebar"
+import { Separator } from "../../components/ui/separator"
+import { SidebarTrigger } from "../../components/ui/sidebar"
 
 export function SiteHeader() {
   return (
