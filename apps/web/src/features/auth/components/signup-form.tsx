@@ -22,12 +22,14 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
     }
     toast.info('Opening browser for GitHub login...');
     
-    // Use deep link callback if in Tauri, otherwise use current origin
-    const redirectUri = isTauri() 
-      ? 'kbm://auth/callback' 
-      : `${window.location.origin}/auth/callback`;
+    // GitHub only allows ONE callback URL per OAuth App (usually the Web platform URL).
+    // To support Desktop Deep Links without a separate backend, we redirect to the Web platform
+    // with state=desktop. The Web platform will then bounce it back to the Desktop app via deep link.
+    const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:1420';
+    const redirectUri = `${webUrl}/auth/callback`;
+    const state = isTauri() ? 'desktop' : 'web';
       
-    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user`;
+    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user&state=${state}`;
     
     // In Tauri desktop app, open in system browser to avoid replacing the app webview
     // which would destroy the custom TitleBar and window controls.

@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 const searchSchema = z.object({
   code: z.string().optional(),
+  state: z.string().optional(),
 }).catch({});
 
 export const Route = createFileRoute('/auth/callback')({
@@ -15,10 +16,18 @@ export const Route = createFileRoute('/auth/callback')({
 
 function AuthCallbackPage() {
   const navigate = useNavigate();
-  const { code } = Route.useSearch();
+  const { code, state } = Route.useSearch();
 
   useEffect(() => {
     if (code) {
+      if (state === 'desktop') {
+        // We are inside the external browser but the login originated from the Desktop app.
+        // Bounce the flow back to the Desktop app via deep link!
+        toast.info('Đang chuyển hướng về ứng dụng Desktop...');
+        window.location.href = `kbm://auth/callback?code=${code}`;
+        return;
+      }
+
       toast.info('Đang xác thực với GitHub...');
       // Simulate API verification
       setTimeout(() => {
