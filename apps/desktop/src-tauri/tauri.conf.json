@@ -11,9 +11,6 @@
   },
   "app": {
     "macOSPrivateApi": true,
-    "deepLink": {
-      "schemes": ["kbm"]
-    },
     "windows": [
       {
         "title": "Kill Bug Machine",
@@ -49,6 +46,9 @@
     ]
   },
   "plugins": {
+    "deep-link": {
+      "schemes": ["kbm"]
+    },
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk0MkYzRjlERDEyNjgzNEQKUldSTmd5YlJuVDh2bE9wVi9aSVpOTlFId2h1bnpIZytHZ1YrMlJJR3ZkUXU0dXYyM0xlSjYrbjgK",
       "endpoints": [
