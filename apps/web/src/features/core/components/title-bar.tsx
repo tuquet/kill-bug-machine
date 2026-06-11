@@ -20,6 +20,7 @@ import {
 } from '@kbm/ui';
 import { WindowControls } from './window-controls';
 import { GITHUB_REPO, GITHUB_ISSUES, API_DOCS_URL } from '@/config';
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/route-config';
 
 export function TitleBar() {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ export function TitleBar() {
               File
             </MenubarTrigger>
             <MenubarContent>
-              <MenubarItem onClick={() => navigate({ to: '/dashboard' })}>
+              <MenubarItem onClick={() => navigate({ to: DEFAULT_AUTHENTICATED_ROUTE })}>
                 New Bug Report
                 <MenubarShortcut>Ctrl+N</MenubarShortcut>
               </MenubarItem>

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { authActions } from '@/features/auth/stores/use-auth-store';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/route-config';
 
 const searchSchema = z.object({
   code: z.string().optional(),
@@ -34,7 +35,7 @@ function AuthCallbackPage() {
       
       // If it's a web flow, navigate automatically
       if (!isDesktopFlow) {
-        navigate({ to: '/dashboard' });
+        navigate({ to: DEFAULT_AUTHENTICATED_ROUTE });
       }
     }, 1500);
 
@@ -64,7 +65,7 @@ function AuthCallbackPage() {
             Mở Ứng dụng Desktop
           </a>
           <button
-            onClick={() => navigate({ to: '/dashboard' })}
+            onClick={() => navigate({ to: DEFAULT_AUTHENTICATED_ROUTE })}
             className="inline-flex h-10 w-full items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             Tiếp tục trên Web Dashboard

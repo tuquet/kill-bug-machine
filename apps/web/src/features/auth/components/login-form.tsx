@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { useForm } from '@tanstack/react-form'
 import { isTauri } from '@tauri-apps/api/core'
 import { openUrl } from '@tauri-apps/plugin-opener'
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/route-config'
 import {
   Button,
   Field,
@@ -33,7 +34,7 @@ export function LoginForm({
       await new Promise((resolve) => setTimeout(resolve, 500));
       authActions.setAuth('ADMIN', 'mock-token', value.email);
       toast.success('Login successful!');
-      navigate({ to: '/dashboard' });
+      navigate({ to: DEFAULT_AUTHENTICATED_ROUTE });
     },
   });
 
@@ -66,7 +67,7 @@ export function LoginForm({
   const handleGuestLogin = () => {
     authActions.loginAsGuest();
     toast.success('Logged in as Guest');
-    navigate({ to: '/dashboard' });
+    navigate({ to: DEFAULT_AUTHENTICATED_ROUTE });
   };
 
   return (

@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { SignupForm } from '@/features/auth/components/signup-form';
-
 import { authStore } from '@/features/auth/stores/use-auth-store';
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/route-config';
 
 export const Route = createFileRoute('/signup')({
   beforeLoad: () => {
@@ -9,7 +9,7 @@ export const Route = createFileRoute('/signup')({
     const hasLoggedIn = !!auth.token || !!auth.displayName;
     if (hasLoggedIn) {
       throw redirect({
-        to: '/dashboard',
+        to: DEFAULT_AUTHENTICATED_ROUTE,
       });
     }
   },

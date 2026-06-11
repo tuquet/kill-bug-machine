@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { isTauri } from '@tauri-apps/api/core';
 import { onOpenUrl } from '@tauri-apps/plugin-deep-link';
 import { toast } from 'sonner';
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/route-config';
 
 const router = createRouter({
   routeTree,
@@ -59,7 +60,7 @@ export default function App() {
              toast.success('Đăng nhập GitHub thành công qua Deep Link!');
              
              // Navigate to dashboard
-             router.navigate({ to: '/dashboard' });
+             router.navigate({ to: DEFAULT_AUTHENTICATED_ROUTE });
           }
         }
       } catch (err) {
