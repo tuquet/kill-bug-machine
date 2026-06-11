@@ -34,6 +34,7 @@ dirs = "5"
 keyring = "3"
 reqwest = { version = "0.12", features = ["json"] }
 utoipa-scalar = { version = "0.2", features = ["axum"] }
+tauri-plugin-deep-link = "~2"
 
 [[bin]]
 name = "kbm-cli"

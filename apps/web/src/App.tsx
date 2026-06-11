@@ -12,7 +12,11 @@ import './app/globals.css';
 
 // Create a new router instance
 import { useStore } from '@tanstack/react-store';
-import { authStore } from '@/features/auth/stores/use-auth-store';
+import { authStore, authActions } from '@/features/auth/stores/use-auth-store';
+import { useEffect } from 'react';
+import { isTauri } from '@tauri-apps/api/core';
+import { onOpenUrl } from '@tauri-apps/plugin-deep-link';
+import { toast } from 'sonner';
 
 const router = createRouter({
   routeTree,
@@ -33,6 +37,41 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 export default function App() {
   const auth = useStore(authStore);
+
+  // Handle OAuth Deep Links in Tauri Desktop App
+  useEffect(() => {
+    if (!isTauri()) return;
+
+    let unlisten: () => void;
+    
+    onOpenUrl((urls) => {
+      const urlStr = urls[0];
+      if (!urlStr) return;
+      
+      try {
+        const url = new URL(urlStr);
+        // Expecting kbm://auth/callback?code=...
+        if (url.host === 'auth' && url.pathname.includes('/callback')) {
+          const code = url.searchParams.get('code');
+          if (code) {
+             // Simulate backend exchanging code for token
+             authActions.setAuth('ADMIN', 'mock-github-token', 'GitHub User');
+             toast.success('Đăng nhập GitHub thành công qua Deep Link!');
+             
+             // Navigate to dashboard
+             router.navigate({ to: '/dashboard' });
+          }
+        }
+      } catch (err) {
+        console.error('Failed to parse deep link:', err);
+      }
+    }).then((u) => { unlisten = u; }).catch(console.error);
+
+    return () => {
+      if (unlisten) unlisten();
+    };
+  }, []);
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

@@ -21,7 +21,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'form'>
       return;
     }
     toast.info('Opening browser for GitHub login...');
-    const redirectUri = `${window.location.origin}/auth/callback`;
+    
+    // Use deep link callback if in Tauri, otherwise use current origin
+    const redirectUri = isTauri() 
+      ? 'kbm://auth/callback' 
+      : `${window.location.origin}/auth/callback`;
+      
     const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user`;
     
     // In Tauri desktop app, open in system browser to avoid replacing the app webview
