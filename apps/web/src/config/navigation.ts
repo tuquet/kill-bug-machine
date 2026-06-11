@@ -22,6 +22,7 @@ import {
   LockIcon,
   BugIcon,
   WrenchIcon,
+  StoreIcon,
 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -60,11 +61,40 @@ export interface DocumentItem {
 // ─── Navigation Groups ──────────────────────────────────────────────────────
 
 export const NAV_MAIN: NavItem[] = [
-  { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboardIcon, requiredPermission: 'dashboard:view' },
-  { title: 'Lifecycle', url: '/lifecycle', icon: ListIcon },
-  { title: 'Analytics', url: '/analytics', icon: ChartBarIcon, requiredPermission: 'analytics:view' },
-  { title: 'Projects', url: '/projects', icon: FolderIcon, requiredPermission: 'projects:view' },
-  { title: 'Team', url: '/team', icon: UsersIcon, requiredPermission: 'team:view' },
+  { 
+    title: 'Dashboard', 
+    url: '/dashboard', 
+    icon: LayoutDashboardIcon, 
+    requiredPermission: 'dashboard:view',
+    items: [{ title: 'Overview', url: '/dashboard' }]
+  },
+  { 
+    title: 'Lifecycle', 
+    url: '/lifecycle', 
+    icon: ListIcon,
+    items: [{ title: 'Overview', url: '/lifecycle' }]
+  },
+  { 
+    title: 'Analytics', 
+    url: '/analytics', 
+    icon: ChartBarIcon, 
+    requiredPermission: 'analytics:view',
+    items: [{ title: 'Overview', url: '/analytics' }]
+  },
+  { 
+    title: 'Projects', 
+    url: '/projects', 
+    icon: FolderIcon, 
+    requiredPermission: 'projects:view',
+    items: [{ title: 'Overview', url: '/projects' }]
+  },
+  { 
+    title: 'Team', 
+    url: '/team', 
+    icon: UsersIcon, 
+    requiredPermission: 'team:view',
+    items: [{ title: 'Overview', url: '/team' }]
+  },
 ];
 
 export const NAV_SHOWCASE: NavGroup = {
@@ -98,6 +128,7 @@ export const NAV_ERROR_PAGES: NavGroup = {
 export const NAV_CLOUDS: NavItem[] = [];
 
 export const NAV_SECONDARY: NavItem[] = [
+  { title: 'App Store', url: '/launcher', icon: StoreIcon },
   { title: 'Settings', url: '#', icon: Settings2Icon, requiredPermission: 'settings:view' },
   { title: 'Get Help', url: '#', icon: CircleHelpIcon },
   { title: 'Search', url: '#', icon: SearchIcon },
@@ -125,48 +156,50 @@ export interface BreadcrumbEntry {
 function buildBreadcrumbMap(): Record<string, BreadcrumbEntry[]> {
   const map: Record<string, BreadcrumbEntry[]> = {};
 
-  // Dashboard (root)
-  map['/dashboard'] = [{ label: 'Dashboard', url: '/dashboard' }];
+  // Main Nav (Apps)
+  for (const group of NAV_MAIN) {
+    if (group.items && group.items.length > 0) {
+      const siblings = group.items.map((i) => ({ label: i.title, url: i.url }));
+      for (const item of group.items) {
+        map[item.url] = [
+          { label: group.title, url: group.items[0].url, siblings },
+          { label: item.title, url: item.url },
+        ];
+      }
+    } else {
+      map[group.url] = [{ label: group.title, url: group.url }];
+    }
+  }
 
-  // Showcase children — each has Dashboard > Showcase (dropdown) > Page
+  // Showcase
   const showcaseSiblings = NAV_SHOWCASE.items.map((i) => ({ label: i.title, url: i.url }));
   for (const item of NAV_SHOWCASE.items) {
     map[item.url] = [
-      { label: 'Dashboard', url: '/dashboard' },
       { label: NAV_SHOWCASE.label, url: NAV_SHOWCASE.items[0]!.url, siblings: showcaseSiblings },
       { label: item.title, url: item.url },
     ];
   }
 
-  // Error pages — siblings of each other under Dashboard > Error Pages (dropdown)
+  // Error Pages
   const errorSiblings = NAV_ERROR_PAGES.items.map((i) => ({ label: i.title, url: i.url }));
   for (const item of NAV_ERROR_PAGES.items) {
     map[item.url] = [
-      { label: 'Dashboard', url: '/dashboard' },
       { label: NAV_ERROR_PAGES.label, url: NAV_ERROR_PAGES.items[0]!.url, siblings: errorSiblings },
       { label: item.title, url: item.url },
     ];
   }
 
-  // Main nav items with real URLs
-  for (const item of NAV_MAIN) {
-    if (item.url !== '#' && item.url !== '/dashboard') {
-      map[item.url] = [
-        { label: 'Dashboard', url: '/dashboard' },
-        { label: item.title, url: item.url },
-      ];
-    }
-  }
-
-  // Documents — siblings of each other under Dashboard > Documents (dropdown)
+  // Documents
   const docSiblings = NAV_DOCUMENTS.map((d) => ({ label: d.name, url: d.url }));
   for (const doc of NAV_DOCUMENTS) {
     map[doc.url] = [
-      { label: 'Dashboard', url: '/dashboard' },
       { label: 'Documents', url: NAV_DOCUMENTS[0]!.url, siblings: docSiblings },
       { label: doc.name, url: doc.url },
     ];
   }
+
+  // Launcher / App Store
+  map['/launcher'] = [{ label: 'App Store', url: '/launcher' }];
 
   return map;
 }

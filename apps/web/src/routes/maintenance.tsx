@@ -13,13 +13,13 @@ function MaintenancePage() {
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--muted)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted)/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,black_40%,transparent_100%)]" />
 
       {/* Floating orbs with emerald/green tones */}
-      <div className="pointer-events-none absolute top-1/3 right-1/4 h-72 w-72 animate-pulse rounded-full bg-emerald-500/5 blur-3xl dark:bg-emerald-400/5" />
-      <div className="pointer-events-none absolute bottom-1/4 left-1/3 h-64 w-64 rounded-full bg-green-500/5 blur-3xl [animation:pulse_5s_ease-in-out_infinite] dark:bg-green-400/5" />
+      <div className="pointer-events-none absolute top-1/3 right-1/4 h-72 w-72 animate-pulse rounded-full bg-primary/5 blur-3xl dark:bg-primary/5" />
+      <div className="pointer-events-none absolute bottom-1/4 left-1/3 h-64 w-64 rounded-full bg-primary/5 blur-3xl [animation:pulse_5s_ease-in-out_infinite] dark:bg-primary/5" />
 
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Wrench icon with spin animation */}
         <div className="relative mb-6">
-          <div className="absolute inset-0 animate-ping rounded-full bg-emerald-500/10 [animation-duration:2.5s]" />
+          <div className="absolute inset-0 animate-ping rounded-full bg-primary/5 [animation-duration:2.5s]" />
           <div className="relative rounded-full bg-muted/50 p-4">
             <Wrench
               className="h-12 w-12 text-muted-foreground/60 [animation:spin_8s_linear_infinite]"

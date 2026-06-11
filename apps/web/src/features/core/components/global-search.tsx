@@ -22,6 +22,8 @@ import {
   NAV_ERROR_PAGES,
 } from '@/config';
 import { useTranslation } from 'react-i18next';
+import { useLauncherStore } from '@/features/launcher/stores/use-launcher-store';
+import { APP_REGISTRY } from '@/features/launcher/config/registry';
 
 export function GlobalSearch() {
   const [open, setOpen] = React.useState(false);
@@ -54,6 +56,9 @@ export function GlobalSearch() {
   const secondaryItems = filterNav(NAV_SECONDARY);
   const showcaseItems = filterNav(NAV_SHOWCASE.items);
   const errorItems = filterNav(NAV_ERROR_PAGES.items);
+
+  const { installedApps } = useLauncherStore();
+  const installedAppItems = installedApps.map(appId => APP_REGISTRY[appId]).filter(Boolean);
 
   return (
     <>
@@ -103,6 +108,27 @@ export function GlobalSearch() {
                     <span>{t(`nav.${item.name}`, item.name)}</span>
                   </CommandItem>
                 ))}
+              </CommandGroup>
+            </>
+          )}
+
+          {installedAppItems.length > 0 && (
+            <>
+              <CommandSeparator />
+              <CommandGroup heading={t('nav.My Apps', 'My Apps')}>
+                {installedAppItems.map((app) => {
+                  const Icon = app.icon;
+                  return (
+                    <CommandItem
+                      key={app.id}
+                      value={app.name}
+                      onSelect={() => runCommand(() => navigate({ to: app.href }))}
+                    >
+                      {Icon && <Icon className="mr-2 h-4 w-4" />}
+                      <span>{app.name}</span>
+                    </CommandItem>
+                  );
+                })}
               </CommandGroup>
             </>
           )}

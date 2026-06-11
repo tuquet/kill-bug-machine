@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useLocation } from '@tanstack/react-router';
 import { Button } from '@kbm/ui';
 import {
   SidebarGroup,
@@ -6,8 +6,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
 } from '@kbm/ui';
-import { CirclePlusIcon, MailIcon } from 'lucide-react';
+import { CirclePlusIcon, MailIcon, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export function NavMain({
@@ -17,9 +23,15 @@ export function NavMain({
     title: string;
     url: string;
     icon?: React.ReactNode;
+    isActive?: boolean;
+    items?: {
+      title: string;
+      url: string;
+    }[];
   }[];
 }) {
   const { t } = useTranslation();
+  const location = useLocation();
 
   return (
     <SidebarGroup>
@@ -44,16 +56,45 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title} asChild>
-                <Link to={item.url} activeProps={{ 'data-active': true } as any}>
-                  {item.icon}
-                  <span>{t(`nav.${item.title}`, item.title)}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {items.map((item) => {
+            const isPathActive = location.pathname.startsWith(item.url);
+            
+            return (
+              <Collapsible
+                key={item.title}
+                asChild
+                defaultOpen={item.isActive || isPathActive}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip={item.title}>
+                      {item.icon}
+                      <span>{t(`nav.${item.title}`, item.title)}</span>
+                      {item.items && item.items.length > 0 && (
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      )}
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  {item.items && item.items.length > 0 && (
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.items.map((subItem) => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <SidebarMenuSubButton asChild>
+                              <Link to={subItem.url} activeProps={{ 'data-active': true } as any} exact>
+                                <span>{t(`nav.${subItem.title}`, subItem.title)}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  )}
+                </SidebarMenuItem>
+              </Collapsible>
+            );
+          })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

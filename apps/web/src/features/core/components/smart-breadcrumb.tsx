@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
 } from '@kbm/ui';
 import { BREADCRUMB_MAP, type BreadcrumbEntry } from '@/config';
+import { useTranslation } from 'react-i18next';
 import { ChevronDownIcon } from 'lucide-react';
 import { useDevStore } from '@/stores/use-dev-store';
 import { toast } from 'sonner';
@@ -38,6 +39,15 @@ function resolveBreadcrumbs(pathname: string): BreadcrumbEntry[] {
 
   // Generic fallback
   const segments = pathname.split('/').filter(Boolean);
+  
+  if (segments[0] === 'launcher') {
+    const trail: BreadcrumbEntry[] = [{ label: 'App Store', url: '/launcher' }];
+    if (segments.length > 1) {
+      trail.push({ label: humanize(segments[1] || ''), url: pathname });
+    }
+    return trail;
+  }
+
   const trail: BreadcrumbEntry[] = [{ label: 'Dashboard', url: '/dashboard' }];
   let accumulated = '';
   for (const seg of segments) {
@@ -53,6 +63,7 @@ export function SmartBreadcrumb() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const items = React.useMemo(() => resolveBreadcrumbs(pathname), [pathname]);
   const { toggleDevMode } = useDevStore();
+  const { t } = useTranslation();
   
   // Easter egg state
   const clickCountRef = React.useRef(0);
@@ -89,13 +100,13 @@ export function SmartBreadcrumb() {
               <BreadcrumbItem>
                 {isLast ? (
                   /* ── Current page ── */
-                  <BreadcrumbPage className="font-medium">{item.label}</BreadcrumbPage>
+                  <BreadcrumbPage className="font-medium">{t(`nav.${item.label}`, item.label)}</BreadcrumbPage>
                 ) : hasSiblings ? (
                   /* ── Parent with sibling dropdown ── */
                   <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center gap-1 text-muted-foreground outline-none transition-colors hover:text-foreground">
                       <BreadcrumbLink asChild>
-                        <span className="cursor-pointer">{item.label}</span>
+                        <span className="cursor-pointer">{t(`nav.${item.label}`, item.label)}</span>
                       </BreadcrumbLink>
                       <ChevronDownIcon className="size-3.5 opacity-60" />
                     </DropdownMenuTrigger>
@@ -107,7 +118,7 @@ export function SmartBreadcrumb() {
                             className="w-full cursor-pointer"
                             activeProps={{ className: 'font-semibold bg-accent' }}
                           >
-                            {sibling.label}
+                            {t(`nav.${sibling.label}`, sibling.label)}
                           </Link>
                         </DropdownMenuItem>
                       ))}
@@ -116,7 +127,7 @@ export function SmartBreadcrumb() {
                 ) : (
                   /* ── Normal parent link ── */
                   <BreadcrumbLink asChild>
-                    <Link to={item.url}>{item.label}</Link>
+                    <Link to={item.url}>{t(`nav.${item.label}`, item.label)}</Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>

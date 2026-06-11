@@ -68,7 +68,7 @@ create policy "user_installed_apps_delete_own"
 create or replace function public.handle_install_core_apps()
 returns trigger
 language plpgsql
-security invoker
+security definer
 set search_path = ''
 as $$
 begin

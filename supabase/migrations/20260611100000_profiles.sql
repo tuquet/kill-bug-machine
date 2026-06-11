@@ -47,7 +47,7 @@ create policy "profiles_insert_own"
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
-security invoker
+security definer
 set search_path = ''
 as $$
 begin

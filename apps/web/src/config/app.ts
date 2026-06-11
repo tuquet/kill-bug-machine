@@ -7,7 +7,7 @@
 
 // ─── Branding ────────────────────────────────────────────────────────────────
 export const APP_NAME = 'Kill Bug Machine';
-export const APP_DESCRIPTION = 'Premium B2B Enterprise Platform with App Marketplace';
+export const APP_DESCRIPTION = 'Premium B2B Enterprise Platform with App Store';
 
 // ─── External URLs ───────────────────────────────────────────────────────────
 export const GITHUB_REPO = 'https://github.com/tuquet/kill-bug-machine';

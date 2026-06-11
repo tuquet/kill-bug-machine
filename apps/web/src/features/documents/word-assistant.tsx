@@ -51,25 +51,25 @@ const quickActions = [
     title: 'New Document',
     description: 'Start with a blank document',
     icon: FilePlusIcon,
-    color: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+    color: 'bg-muted text-muted-foreground',
   },
   {
     title: 'From Template',
     description: 'Choose from pre-built templates',
     icon: LayoutTemplateIcon,
-    color: 'bg-violet-500/10 text-violet-600 dark:text-violet-400',
+    color: 'bg-muted text-muted-foreground',
   },
   {
     title: 'Import',
     description: 'Import .docx, .pdf, or .md files',
     icon: UploadIcon,
-    color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    color: 'bg-muted text-muted-foreground',
   },
   {
     title: 'AI Generate',
     description: 'Generate content with AI assistance',
     icon: SparklesIcon,
-    color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+    color: 'bg-muted text-muted-foreground',
   },
 ];
 

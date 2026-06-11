@@ -2,6 +2,8 @@ import { Store } from '@tanstack/store';
 import { useStore } from '@tanstack/react-store';
 import { supabase } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
+import { isDesktop } from '@/utils/platform';
+import { openUrl } from '@tauri-apps/plugin-opener';
 
 export type Role = 'GUEST' | 'USER' | 'ADMIN';
 
@@ -67,14 +69,29 @@ export const authActions = {
 
   /** Sign in with GitHub OAuth */
   signInWithGitHub: async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (error) throw error;
-    return data;
+    if (isDesktop()) {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: 'kbm://auth/callback',
+          skipBrowserRedirect: true,
+        },
+      });
+      if (error) throw error;
+      if (data.url) {
+        await openUrl(data.url);
+      }
+      return data;
+    } else {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+      return data;
+    }
   },
 
   /** Sign in anonymously (Guest mode) */

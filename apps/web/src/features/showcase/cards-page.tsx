@@ -121,7 +121,7 @@ export function CardsShowcase() {
           <CardContent>
             <div className="text-2xl font-bold">$45,231.89</div>
             <p className="text-xs text-muted-foreground">
-              <span className="text-emerald-600">+20.1%</span> from last month
+              <span className="text-muted-foreground">+20.1%</span> from last month
             </p>
           </CardContent>
         </Card>
@@ -133,7 +133,7 @@ export function CardsShowcase() {
           <CardContent>
             <div className="text-2xl font-bold">+2,350</div>
             <p className="text-xs text-muted-foreground">
-              <span className="text-emerald-600">+180.1%</span> from last month
+              <span className="text-muted-foreground">+180.1%</span> from last month
             </p>
           </CardContent>
         </Card>
@@ -145,7 +145,7 @@ export function CardsShowcase() {
           <CardContent>
             <div className="text-2xl font-bold">+12,234</div>
             <p className="text-xs text-muted-foreground">
-              <span className="text-emerald-600">+19%</span> from last month
+              <span className="text-muted-foreground">+19%</span> from last month
             </p>
           </CardContent>
         </Card>
@@ -157,7 +157,7 @@ export function CardsShowcase() {
           <CardContent>
             <div className="text-2xl font-bold">99.98%</div>
             <p className="text-xs text-muted-foreground">
-              <span className="text-emerald-600">+0.02%</span> from last month
+              <span className="text-muted-foreground">+0.02%</span> from last month
             </p>
           </CardContent>
         </Card>

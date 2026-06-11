@@ -5,6 +5,7 @@ export * from './components/ui/button';
 export * from './components/ui/card';
 export * from './components/ui/chart';
 export * from './components/ui/checkbox';
+export * from './components/ui/collapsible';
 export * from './components/ui/drawer';
 export * from './components/ui/dropdown-menu';
 export * from './components/ui/input';

@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/features/auth/stores/use-auth-store';
 import { Bell, Check, Clock, Info, AlertTriangle, Package } from 'lucide-react';
 import {
   Button,
@@ -13,61 +16,99 @@ interface Notification {
   id: string;
   title: string;
   description: string;
-  time: string;
-  read: boolean;
+  created_at: string;
+  is_read: boolean;
   type: 'info' | 'warning' | 'success' | 'update';
+  action_url?: string | null;
 }
 
 const typeIcon = {
-  info: <Info className="h-4 w-4 text-blue-500" />,
-  warning: <AlertTriangle className="h-4 w-4 text-yellow-500" />,
-  success: <Check className="h-4 w-4 text-green-500" />,
-  update: <Package className="h-4 w-4 text-purple-500" />,
+  info: <Info className="h-4 w-4 text-muted-foreground" />,
+  warning: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
+  success: <Check className="h-4 w-4 text-muted-foreground" />,
+  update: <Package className="h-4 w-4 text-muted-foreground" />,
 };
 
-const mockNotifications: Notification[] = [
-  {
-    id: '1',
-    title: 'Welcome to Kill Bug Machine',
-    description: 'Get started by exploring the dashboard and component showcase.',
-    time: '2m ago',
-    read: false,
-    type: 'info',
-  },
-  {
-    id: '2',
-    title: 'New update available',
-    description: 'Version 0.2.0 is ready to install with bug fixes and improvements.',
-    time: '1h ago',
-    read: false,
-    type: 'update',
-  },
-  {
-    id: '3',
-    title: 'Build completed',
-    description: 'Production build finished successfully in 12.4s.',
-    time: '3h ago',
-    read: true,
-    type: 'success',
-  },
-  {
-    id: '4',
-    title: 'API rate limit warning',
-    description: 'You have used 80% of your daily API quota.',
-    time: '5h ago',
-    read: true,
-    type: 'warning',
-  },
-];
+function timeAgo(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+  if (seconds < 60) return `Just now`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
 
 export function NotificationButton() {
-  const [notifications, setNotifications] = useState(mockNotifications);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  useEffect(() => {
+    if (!user) return;
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    const fetchNotifications = async () => {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (!error && data) {
+        setNotifications(data as Notification[]);
+      }
+    };
+
+    fetchNotifications();
+
+    const channel = supabase
+      .channel('realtime_notifications')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          setNotifications((prev) => [payload.new as Notification, ...prev]);
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          setNotifications((prev) =>
+            prev.map((n) => (n.id === payload.new.id ? (payload.new as Notification) : n))
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
+
+  const markAllAsRead = async () => {
+    if (!user) return;
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+    await supabase.from('notifications').update({ is_read: true }).eq('user_id', user.id).eq('is_read', false);
+  };
+
+  const handleNotificationClick = async (notification: Notification) => {
+    if (!notification.is_read) {
+      setNotifications((prev) => prev.map((n) => n.id === notification.id ? { ...n, is_read: true } : n));
+      await supabase.from('notifications').update({ is_read: true }).eq('id', notification.id);
+    }
+    if (notification.action_url) {
+      setIsOpen(false);
+      navigate({ to: notification.action_url });
+    }
   };
 
   const handleOpenChange = (open: boolean) => {
@@ -80,7 +121,7 @@ export function NotificationButton() {
         <Button variant="outline" size="icon" className="relative h-9 w-9">
           <Bell className="h-[1.2rem] w-[1.2rem]" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
+            <span className="absolute -top-1 -right-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           )}
@@ -114,17 +155,18 @@ export function NotificationButton() {
               {notifications.map((notification, i) => (
                 <div key={notification.id}>
                   <div
-                    className={`flex items-start gap-3 p-3 text-sm transition-colors hover:bg-muted/50 ${
-                      !notification.read ? 'bg-primary/5' : ''
+                    onClick={() => handleNotificationClick(notification)}
+                    className={`flex items-start gap-3 p-3 text-sm transition-colors hover:bg-muted/50 cursor-pointer ${
+                      !notification.is_read ? 'bg-primary/5' : ''
                     }`}
                   >
                     <div className="mt-0.5">{typeIcon[notification.type]}</div>
                     <div className="flex flex-col gap-1 min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <span className={`text-xs font-medium ${!notification.read ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        <span className={`text-xs font-medium ${!notification.is_read ? 'text-foreground' : 'text-muted-foreground'}`}>
                           {notification.title}
                         </span>
-                        {!notification.read && (
+                        {!notification.is_read && (
                           <span className="h-2 w-2 rounded-full bg-primary shrink-0" />
                         )}
                       </div>
@@ -133,7 +175,7 @@ export function NotificationButton() {
                       </p>
                       <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        {notification.time}
+                        {timeAgo(notification.created_at)}
                       </div>
                     </div>
                   </div>

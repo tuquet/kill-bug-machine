@@ -95,21 +95,18 @@ const reports: Report[] = [
 
 const statusConfig: Record<
   ReportStatus,
-  { variant: 'default' | 'secondary' | 'outline'; className: string; icon: typeof CheckCircle2Icon }
+  { variant: 'default' | 'secondary' | 'outline'; icon: typeof CheckCircle2Icon }
 > = {
   Ready: {
     variant: 'default',
-    className: 'bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25 dark:text-emerald-400',
     icon: CheckCircle2Icon,
   },
   Processing: {
     variant: 'secondary',
-    className: 'bg-amber-500/15 text-amber-700 hover:bg-amber-500/25 dark:text-amber-400',
     icon: LoaderIcon,
   },
   Scheduled: {
     variant: 'outline',
-    className: 'bg-blue-500/15 text-blue-700 hover:bg-blue-500/25 border-blue-500/20 dark:text-blue-400',
     icon: ClockIcon,
   },
 };
@@ -159,7 +156,7 @@ export function ReportsPage() {
           <CardContent>
             <div className="text-2xl font-bold">24</div>
             <p className="text-xs text-muted-foreground">
-              <span className="text-emerald-600">+3</span> this week
+              <span className="text-muted-foreground">+3</span> this week
             </p>
           </CardContent>
         </Card>
@@ -227,7 +224,6 @@ export function ReportsPage() {
                     <TableCell>
                       <Badge
                         variant={statusCfg.variant}
-                        className={statusCfg.className}
                       >
                         <StatusIcon className="size-3" />
                         {report.status}

@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/route-config';
@@ -11,6 +11,7 @@ export const Route = createFileRoute('/auth/callback')({
 function AuthCallbackPage() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const hasToasted = useRef(false);
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -24,14 +25,20 @@ function AuthCallbackPage() {
         }
 
         if (session) {
-          toast.success('Đăng nhập thành công!');
+          if (!hasToasted.current) {
+            hasToasted.current = true;
+            toast.success('Đăng nhập thành công!');
+          }
           navigate({ to: DEFAULT_AUTHENTICATED_ROUTE });
         } else {
           // If no session yet, Supabase may still be processing
           // Listen for the auth state change
           const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_IN' && session) {
-              toast.success('Đăng nhập thành công!');
+              if (!hasToasted.current) {
+                hasToasted.current = true;
+                toast.success('Đăng nhập thành công!');
+              }
               navigate({ to: DEFAULT_AUTHENTICATED_ROUTE });
               subscription.unsubscribe();
             }

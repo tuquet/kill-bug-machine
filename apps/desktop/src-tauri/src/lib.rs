@@ -3,11 +3,17 @@ pub mod db;
 pub mod api;
 
 use commands::credentials;
-use tauri::Manager;
+use tauri::{Manager, Emitter};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
+            if let Some(url) = args.iter().find(|a| a.starts_with("kbm://")) {
+                let _ = app.emit("deep-link-received", url.clone());
+            }
+            let _ = app.get_webview_window("main").expect("no main window").set_focus();
+        }))
         .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::default().build())

@@ -4,15 +4,19 @@ import { SiteHeader } from '@/features/core/components/site-header';
 import { RouteProgressBar } from '@/features/core/components/route-progress-bar';
 import { SidebarInset, SidebarProvider } from '@kbm/ui';
 import { SIDEBAR_WIDTH, HEADER_HEIGHT } from '@/config';
+import { useLayoutStore } from '@/stores/use-layout-store';
 
 export function AppLayout() {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const { sidebarOpen, setSidebarOpen } = useLayoutStore();
 
   return (
     <>
       <RouteProgressBar />
       <SidebarProvider
+        open={sidebarOpen}
+        onOpenChange={setSidebarOpen}
         style={
           {
             '--sidebar-width': SIDEBAR_WIDTH,
@@ -25,7 +29,7 @@ export function AppLayout() {
         <SidebarInset className="relative">
           <SiteHeader />
           <div className="flex flex-1 flex-col overflow-auto">
-            <div key={currentPath} className="page-transition flex flex-1 flex-col">
+            <div key={currentPath} className="page-transition flex flex-1 flex-col pb-8">
               <Outlet />
             </div>
           </div>

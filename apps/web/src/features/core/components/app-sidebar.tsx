@@ -17,7 +17,7 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
 } from '@kbm/ui';
-import { CommandIcon } from 'lucide-react';
+import { CommandIcon, CompassIcon, AlertTriangleIcon, DatabaseIcon } from 'lucide-react';
 import {
   APP_NAME,
   NAV_MAIN,
@@ -51,19 +51,42 @@ const AppSidebarInner = ({ ...props }: React.ComponentProps<typeof Sidebar>) => 
   const showcaseItems = filterNav(NAV_SHOWCASE.items);
   const errorItems = filterNav(NAV_ERROR_PAGES.items);
   
-  // Inject the App Launcher into the secondary items dynamically
-  const launcherItem = {
-    title: 'App Launcher',
-    url: '/launcher',
-    icon: Blocks,
-  };
-  const secondaryItems = [launcherItem, ...filterNav(NAV_SECONDARY)];
+  const secondaryItems = filterNav(NAV_SECONDARY);
   
   const documentItems = filterNav(NAV_DOCUMENTS);
 
   const hasShowcase = installedApps.includes('showcase');
   const hasErrorPages = installedApps.includes('error-pages');
   const hasDocuments = installedApps.includes('documents');
+
+  const combinedMainItems = [...mainItems];
+
+  if (hasShowcase && isDevMode && can(NAV_SHOWCASE.requiredPermission) && showcaseItems.length > 0) {
+    combinedMainItems.push({
+      title: NAV_SHOWCASE.label,
+      url: showcaseItems[0].url,
+      icon: CompassIcon,
+      items: showcaseItems,
+    } as any);
+  }
+
+  if (hasErrorPages && isDevMode && can(NAV_ERROR_PAGES.requiredPermission) && errorItems.length > 0) {
+    combinedMainItems.push({
+      title: NAV_ERROR_PAGES.label,
+      url: errorItems[0].url,
+      icon: AlertTriangleIcon,
+      items: errorItems,
+    } as any);
+  }
+
+  if (hasDocuments && documentItems.length > 0) {
+    combinedMainItems.push({
+      title: 'Documents',
+      url: documentItems[0].url,
+      icon: DatabaseIcon,
+      items: documentItems.map(d => ({ title: d.name, url: d.url })),
+    } as any);
+  }
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -81,64 +104,13 @@ const AppSidebarInner = ({ ...props }: React.ComponentProps<typeof Sidebar>) => 
       </SidebarHeader>
       <SidebarContent>
         <NavMain
-          items={mainItems.map((item) => ({
+          items={combinedMainItems.map((item) => ({
             title: item.title,
             url: item.url,
             icon: <item.icon />,
+            items: item.items,
           }))}
         />
-
-        {/* Component Showcase — only if user can see the group and in Dev Mode */}
-        {hasShowcase && isDevMode && can(NAV_SHOWCASE.requiredPermission) && showcaseItems.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>{t(`nav.${NAV_SHOWCASE.label}`, NAV_SHOWCASE.label)}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {showcaseItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton tooltip={t(`nav.${item.title}`, item.title)} asChild>
-                      <Link to={item.url} activeProps={{ 'data-active': true } as Record<string, boolean>}>
-                        <item.icon />
-                        <span>{t(`nav.${item.title}`, item.title)}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {/* Error Pages — only if user can see the group and in Dev Mode */}
-        {hasErrorPages && isDevMode && can(NAV_ERROR_PAGES.requiredPermission) && errorItems.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>{t(`nav.${NAV_ERROR_PAGES.label}`, NAV_ERROR_PAGES.label)}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {errorItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton tooltip={t(`nav.${item.title}`, item.title)} asChild>
-                      <Link to={item.url} activeProps={{ 'data-active': true } as Record<string, boolean>}>
-                        <item.icon />
-                        <span>{t(`nav.${item.title}`, item.title)}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {hasDocuments && documentItems.length > 0 && (
-          <NavDocuments
-            items={documentItems.map((d) => ({
-              name: d.name,
-              url: d.url,
-              icon: <d.icon />,
-            }))}
-          />
-        )}
         <NavSecondary
           items={secondaryItems.map((item) => ({
             title: item.title,

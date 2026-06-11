@@ -22,6 +22,7 @@ import { Route as R404RouteImport } from './routes/404'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as R401RouteImport } from './routes/401'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthenticatedLauncherAppIdRouteImport } from './routes/_authenticated/launcher_.$appId'
 
 const IndexLazyRouteImport = createFileRoute('/')()
 const AuthenticatedTeamLazyRouteImport = createFileRoute(
@@ -238,6 +239,12 @@ const AuthenticatedDocumentsDataLibraryLazyRoute =
       (d) => d.Route,
     ),
   )
+const AuthenticatedLauncherAppIdRoute =
+  AuthenticatedLauncherAppIdRouteImport.update({
+    id: '/launcher_/$appId',
+    path: '/launcher/$appId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
@@ -257,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/lifecycle': typeof AuthenticatedLifecycleLazyRoute
   '/projects': typeof AuthenticatedProjectsLazyRoute
   '/team': typeof AuthenticatedTeamLazyRoute
+  '/launcher/$appId': typeof AuthenticatedLauncherAppIdRoute
   '/documents/data-library': typeof AuthenticatedDocumentsDataLibraryLazyRoute
   '/documents/reports': typeof AuthenticatedDocumentsReportsLazyRoute
   '/documents/word-assistant': typeof AuthenticatedDocumentsWordAssistantLazyRoute
@@ -283,6 +291,7 @@ export interface FileRoutesByTo {
   '/lifecycle': typeof AuthenticatedLifecycleLazyRoute
   '/projects': typeof AuthenticatedProjectsLazyRoute
   '/team': typeof AuthenticatedTeamLazyRoute
+  '/launcher/$appId': typeof AuthenticatedLauncherAppIdRoute
   '/documents/data-library': typeof AuthenticatedDocumentsDataLibraryLazyRoute
   '/documents/reports': typeof AuthenticatedDocumentsReportsLazyRoute
   '/documents/word-assistant': typeof AuthenticatedDocumentsWordAssistantLazyRoute
@@ -311,6 +320,7 @@ export interface FileRoutesById {
   '/_authenticated/lifecycle': typeof AuthenticatedLifecycleLazyRoute
   '/_authenticated/projects': typeof AuthenticatedProjectsLazyRoute
   '/_authenticated/team': typeof AuthenticatedTeamLazyRoute
+  '/_authenticated/launcher_/$appId': typeof AuthenticatedLauncherAppIdRoute
   '/_authenticated/documents/data-library': typeof AuthenticatedDocumentsDataLibraryLazyRoute
   '/_authenticated/documents/reports': typeof AuthenticatedDocumentsReportsLazyRoute
   '/_authenticated/documents/word-assistant': typeof AuthenticatedDocumentsWordAssistantLazyRoute
@@ -339,6 +349,7 @@ export interface FileRouteTypes {
     | '/lifecycle'
     | '/projects'
     | '/team'
+    | '/launcher/$appId'
     | '/documents/data-library'
     | '/documents/reports'
     | '/documents/word-assistant'
@@ -365,6 +376,7 @@ export interface FileRouteTypes {
     | '/lifecycle'
     | '/projects'
     | '/team'
+    | '/launcher/$appId'
     | '/documents/data-library'
     | '/documents/reports'
     | '/documents/word-assistant'
@@ -392,6 +404,7 @@ export interface FileRouteTypes {
     | '/_authenticated/lifecycle'
     | '/_authenticated/projects'
     | '/_authenticated/team'
+    | '/_authenticated/launcher_/$appId'
     | '/_authenticated/documents/data-library'
     | '/_authenticated/documents/reports'
     | '/_authenticated/documents/word-assistant'
@@ -593,6 +606,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDocumentsDataLibraryLazyRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/launcher_/$appId': {
+      id: '/_authenticated/launcher_/$appId'
+      path: '/launcher/$appId'
+      fullPath: '/launcher/$appId'
+      preLoaderRoute: typeof AuthenticatedLauncherAppIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -603,6 +623,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLifecycleLazyRoute: typeof AuthenticatedLifecycleLazyRoute
   AuthenticatedProjectsLazyRoute: typeof AuthenticatedProjectsLazyRoute
   AuthenticatedTeamLazyRoute: typeof AuthenticatedTeamLazyRoute
+  AuthenticatedLauncherAppIdRoute: typeof AuthenticatedLauncherAppIdRoute
   AuthenticatedDocumentsDataLibraryLazyRoute: typeof AuthenticatedDocumentsDataLibraryLazyRoute
   AuthenticatedDocumentsReportsLazyRoute: typeof AuthenticatedDocumentsReportsLazyRoute
   AuthenticatedDocumentsWordAssistantLazyRoute: typeof AuthenticatedDocumentsWordAssistantLazyRoute
@@ -619,6 +640,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLifecycleLazyRoute: AuthenticatedLifecycleLazyRoute,
   AuthenticatedProjectsLazyRoute: AuthenticatedProjectsLazyRoute,
   AuthenticatedTeamLazyRoute: AuthenticatedTeamLazyRoute,
+  AuthenticatedLauncherAppIdRoute: AuthenticatedLauncherAppIdRoute,
   AuthenticatedDocumentsDataLibraryLazyRoute:
     AuthenticatedDocumentsDataLibraryLazyRoute,
   AuthenticatedDocumentsReportsLazyRoute:

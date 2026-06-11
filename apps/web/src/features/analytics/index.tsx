@@ -176,18 +176,18 @@ export function AnalyticsPage() {
               <div className="mt-1 flex items-center gap-1 text-xs">
                 {stat.title === 'Bounce Rate' ? (
                   <>
-                    <ArrowDownIcon className="h-3 w-3 text-green-500" />
-                    <span className="text-green-500">{stat.change}</span>
+                    <ArrowDownIcon className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-muted-foreground">{stat.change}</span>
                   </>
                 ) : stat.trend === 'up' ? (
                   <>
-                    <ArrowUpIcon className="h-3 w-3 text-green-500" />
-                    <span className="text-green-500">{stat.change}</span>
+                    <ArrowUpIcon className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-muted-foreground">{stat.change}</span>
                   </>
                 ) : (
                   <>
-                    <ArrowDownIcon className="h-3 w-3 text-red-500" />
-                    <span className="text-red-500">{stat.change}</span>
+                    <ArrowDownIcon className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-muted-foreground">{stat.change}</span>
                   </>
                 )}
                 <span className="text-muted-foreground">

@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useQuery } from '@tanstack/react-query';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@kbm/ui';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Badge } from '@kbm/ui';
 import { Card } from '@kbm/ui';
 
 // 1. Mock Data Generator
@@ -70,19 +70,10 @@ export function BugsTable() {
         size: 150,
         cell: (info: CellContext<Bug, string>) => {
           const val = info.getValue();
-          const colors = {
-            Open: 'text-red-500 bg-red-500/10',
-            'In Progress': 'text-blue-500 bg-blue-500/10',
-            Resolved: 'text-emerald-500 bg-emerald-500/10',
-          };
           return (
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                colors[val as keyof typeof colors]
-              }`}
-            >
+            <Badge variant="secondary" className="font-medium">
               {val}
-            </span>
+            </Badge>
           );
         },
       },

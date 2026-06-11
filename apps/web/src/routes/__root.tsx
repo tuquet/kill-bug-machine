@@ -68,8 +68,11 @@ function NotFound() {
   );
 }
 
+import { useDeepLinkAuth } from '@/features/auth/hooks/use-deep-link-auth';
+
 function RootComponent() {
   const { setDevMode } = useDevStore();
+  useDeepLinkAuth();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

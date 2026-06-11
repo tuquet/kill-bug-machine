@@ -14,7 +14,7 @@ function ServiceUnavailablePage() {
 
       {/* Floating orbs with warm tones */}
       <div className="pointer-events-none absolute top-1/3 left-1/3 h-72 w-72 animate-pulse rounded-full bg-orange-500/5 blur-3xl dark:bg-orange-400/5" />
-      <div className="pointer-events-none absolute right-1/3 bottom-1/3 h-64 w-64 rounded-full bg-amber-500/5 blur-3xl [animation:pulse_5s_ease-in-out_infinite] dark:bg-amber-400/5" />
+      <div className="pointer-events-none absolute right-1/3 bottom-1/3 h-64 w-64 rounded-full bg-primary/5 blur-3xl [animation:pulse_5s_ease-in-out_infinite] dark:bg-primary/5" />
 
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Pulsing server icon */}

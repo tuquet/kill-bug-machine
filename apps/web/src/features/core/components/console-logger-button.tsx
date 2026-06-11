@@ -7,8 +7,8 @@ import { toast } from 'sonner';
 const getLevelIcon = (level: LogLevel) => {
   switch (level) {
     case 'error': return <XCircle className="w-4 h-4 text-destructive" />;
-    case 'warn': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-    case 'info': return <Info className="w-4 h-4 text-blue-500" />;
+    case 'warn': return <AlertTriangle className="w-4 h-4 text-muted-foreground" />;
+    case 'info': return <Info className="w-4 h-4 text-muted-foreground" />;
     default: return <Terminal className="w-4 h-4 text-muted-foreground" />;
   }
 };
@@ -16,8 +16,8 @@ const getLevelIcon = (level: LogLevel) => {
 const getLevelColor = (level: LogLevel) => {
   switch (level) {
     case 'error': return 'bg-destructive/10 text-destructive border-destructive/20';
-    case 'warn': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
-    case 'info': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+    case 'warn': return 'bg-muted text-muted-foreground border-border';
+    case 'info': return 'bg-muted text-muted-foreground border-border';
     default: return 'bg-muted text-muted-foreground border-border';
   }
 };
@@ -66,7 +66,7 @@ export function ConsoleLoggerButton() {
                 </Badge>
               )}
               {warnCount > 0 && (
-                <Badge variant="outline" className="text-[10px] h-4 px-1 bg-yellow-500/10 text-yellow-500 border-none">
+                <Badge variant="secondary" className="text-[10px] h-4 px-1">
                   {warnCount} Warn
                 </Badge>
               )}

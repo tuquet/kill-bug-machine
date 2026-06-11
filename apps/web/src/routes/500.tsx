@@ -14,7 +14,7 @@ function InternalServerErrorPage() {
 
       {/* Floating orbs with purple/violet tones */}
       <div className="pointer-events-none absolute top-1/4 left-1/3 h-72 w-72 animate-pulse rounded-full bg-purple-500/5 blur-3xl dark:bg-purple-400/5" />
-      <div className="pointer-events-none absolute right-1/4 bottom-1/3 h-80 w-80 rounded-full bg-violet-500/5 blur-3xl [animation:pulse_4s_ease-in-out_infinite] dark:bg-violet-400/5" />
+      <div className="pointer-events-none absolute right-1/4 bottom-1/3 h-80 w-80 rounded-full bg-primary/5 blur-3xl [animation:pulse_4s_ease-in-out_infinite] dark:bg-primary/5" />
 
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Bug icon with pulse ring */}
