@@ -1,6 +1,8 @@
 import { cn } from '@kbm/ui';
 import { Link } from '@tanstack/react-router';
-import { toast } from 'sonner';
+import { toast } from 'sonner'
+import { isTauri } from '@tauri-apps/api/core'
+import { openUrl } from '@tauri-apps/plugin-opener';
 import {
   Button,
   Field,
@@ -12,15 +14,23 @@ import {
 } from '@kbm/ui';
 
 export function SignupForm({ className, ...props }: React.ComponentProps<'form'>) {
-  const handleGitHubLogin = () => {
+  const handleGitHubLogin = async () => {
     const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
     if (!clientId) {
       alert("Vui lòng điền VITE_GITHUB_CLIENT_ID vào file .env ở thư mục apps/web");
       return;
     }
-    toast.info('Redirecting to GitHub...');
+    toast.info('Opening browser for GitHub login...');
     const redirectUri = `${window.location.origin}/auth/callback`;
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user`;
+    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user`;
+    
+    // In Tauri desktop app, open in system browser to avoid replacing the app webview
+    // which would destroy the custom TitleBar and window controls.
+    if (isTauri()) {
+      await openUrl(url);
+    } else {
+      window.location.href = url;
+    }
   };
 
   return (
