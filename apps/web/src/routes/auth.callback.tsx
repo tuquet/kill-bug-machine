@@ -26,15 +26,19 @@ function AuthCallbackPage() {
       return;
     }
 
-    if (!isDesktopFlow) {
-      toast.info('Đang xác thực với GitHub...');
-      // Simulate API verification
-      setTimeout(() => {
-        authActions.setAuth('USER', `github-token-${code}`);
-        toast.success('Đăng nhập GitHub thành công!');
+    // Always authenticate the user in the background so the web session is active
+    toast.info('Đang xác thực với GitHub...');
+    const timer = setTimeout(() => {
+      authActions.setAuth('USER', `github-token-${code}`);
+      toast.success('Đăng nhập GitHub thành công!');
+      
+      // If it's a web flow, navigate automatically
+      if (!isDesktopFlow) {
         navigate({ to: '/dashboard' });
-      }, 1500);
-    }
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, [code, navigate, isDesktopFlow]);
 
   if (isDesktopFlow) {
@@ -59,9 +63,15 @@ function AuthCallbackPage() {
           >
             Mở Ứng dụng Desktop
           </a>
+          <button
+            onClick={() => navigate({ to: '/dashboard' })}
+            className="inline-flex h-10 w-full items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
+            Tiếp tục trên Web Dashboard
+          </button>
           <p className="mt-4 text-xs text-muted-foreground">
             Lưu ý: Trình duyệt sẽ yêu cầu quyền mở ứng dụng. Hãy nhấn "Cho phép" (Allow). <br /><br />
-            Nếu báo lỗi "scheme does not have a registered handler" (thường gặp khi dev trên Windows), hãy thử chạy lại command <code>pnpm tauri dev</code> bằng Terminal có quyền Administrator để hệ thống đăng ký Deep Link.
+            Nếu desktop app không tự mở, có thể máy bạn chưa đăng ký Deep Link (cần chạy `pnpm tauri dev` bằng Terminal quyền Administrator 1 lần).
           </p>
         </div>
       </div>
