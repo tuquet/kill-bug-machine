@@ -8,6 +8,17 @@ A **Premium B2B Enterprise Platform** with an **App Marketplace**, built as a cr
 ![TanStack](https://img.shields.io/badge/TanStack-Ecosystem-FF4154)
 ![shadcn/ui](https://img.shields.io/badge/shadcn/ui-latest-000?logo=shadcnui)
 
+## 🌍 The Big Picture (Project Context)
+
+**Kill Bug Machine** is a **Premium B2B Enterprise SaaS Platform** designed to function like an Operating System for teams. Instead of a rigid, bloated interface, it provides a modular **App Marketplace** where users can "install" or "uninstall" features (e.g., Analytics, Projects, Documents) to tailor their workspace.
+
+### Key Architectural Pillars:
+
+1. **Cross-Platform Delivery**: Ships as a Web App (React/Vite) and a Desktop App (Tauri v2). The Desktop app features a Rust Axum companion API for OS-level integrations and uses deep-linking (`kbm://`) to handle OAuth callbacks seamlessly.
+2. **Supabase Backend**: Fully relies on Supabase for robust Authentication (GitHub OAuth, Anonymous, Email/Password), PostgreSQL Database (with strict Row Level Security), and Realtime Subscriptions (for instant notifications).
+3. **App Marketplace (Monolith Feature Flags)**: The core UX paradigm. Features are built as modules. A user's installed apps are stored in Supabase, synced via TanStack Query to local state, and dynamically render UI elements (like the Sidebar).
+4. **TanStack Ecosystem**: The frontend heavily leverages TanStack Router (file-based routing), TanStack Query (server state), and TanStack Store (client state) to ensure maximum type-safety and performance.
+
 ## What's Included
 
 - **Frontend**: React 19, Vite 6, Tailwind CSS v4, shadcn/ui (56+ components), TanStack Router, TanStack Store, TanStack Query, TanStack Form, TanStack Table
@@ -125,23 +136,23 @@ pnpm --filter @kbm/desktop tauri build  # Build desktop installer (.exe/.msi)
 
 ## Tech Stack
 
-| Layer | Technology |
-|:------|:-----------|
-| Desktop Shell | Tauri v2 |
+| Layer             | Technology                                           |
+| :---------------- | :--------------------------------------------------- |
+| Desktop Shell     | Tauri v2                                             |
 | Backend (Primary) | Supabase (Auth, PostgreSQL, Storage, Edge Functions) |
-| Backend (Desktop) | Rust Axum (keyring, updater, local SQLite) |
-| Frontend | React 19, Vite 6 |
-| UI Components | shadcn/ui, Radix UI |
-| Styling | Tailwind CSS v4 |
-| State Management | TanStack Store, TanStack Query |
-| Routing | TanStack Router (file-based) |
-| Forms | TanStack Form + Zod |
-| Tables | TanStack Table + TanStack Virtual |
-| Monorepo | Turborepo, pnpm workspaces |
-| API Docs | OpenAPI (utoipa) + Scalar |
-| i18n | i18next (vi, en) |
-| Testing | Vitest + Testing Library |
-| Docs Site | VitePress |
+| Backend (Desktop) | Rust Axum (keyring, updater, local SQLite)           |
+| Frontend          | React 19, Vite 6                                     |
+| UI Components     | shadcn/ui, Radix UI                                  |
+| Styling           | Tailwind CSS v4                                      |
+| State Management  | TanStack Store, TanStack Query                       |
+| Routing           | TanStack Router (file-based)                         |
+| Forms             | TanStack Form + Zod                                  |
+| Tables            | TanStack Table + TanStack Virtual                    |
+| Monorepo          | Turborepo, pnpm workspaces                           |
+| API Docs          | OpenAPI (utoipa) + Scalar                            |
+| i18n              | i18next (vi, en)                                     |
+| Testing           | Vitest + Testing Library                             |
+| Docs Site         | VitePress                                            |
 
 ## App Marketplace
 
@@ -179,6 +190,7 @@ scoop install webview2-runtime
 **Nguyên nhân:** Missing or incorrect `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` in `.env`.
 
 **Fix:**
+
 1. Copy `.env.example` to `.env`
 2. Get your keys from [Supabase Dashboard](https://supabase.com/dashboard) → Project Settings → API
 3. Fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
