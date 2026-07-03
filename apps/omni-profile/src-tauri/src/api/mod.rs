@@ -40,20 +40,38 @@ pub struct AppState {
         handlers::browser_profiles::clean_profile_storage,
         handlers::browser_profiles::delete_browser_engine,
         handlers::browser_profiles::get_download_status,
-        handlers::browser_profiles::get_engine_status
+        handlers::browser_profiles::get_engine_status,
+        handlers::groups::get_groups,
+        handlers::groups::get_group,
+        handlers::groups::create_group,
+        handlers::groups::update_group,
+        handlers::groups::delete_group,
+        handlers::proxies::get_proxies,
+        handlers::proxies::get_proxy,
+        handlers::proxies::create_proxy,
+        handlers::proxies::update_proxy,
+        handlers::proxies::delete_proxy
     ),
     components(
         schemas(
             crate::db::models::browser_profile::BrowserProfile,
             crate::db::models::browser_profile::CreateBrowserProfilePayload,
             crate::db::models::browser_profile::UpdateBrowserProfilePayload,
+            crate::db::models::groups::Group,
+            crate::db::models::groups::CreateGroup,
+            crate::db::models::groups::UpdateGroup,
+            crate::db::models::proxies::Proxy,
+            crate::db::models::proxies::CreateProxy,
+            crate::db::models::proxies::UpdateProxy,
             handlers::browser_profiles::BrowserVersion,
             handlers::browser_profiles::EngineStatusResponse
         )
     ),
     tags(
         (name = "health", description = "Health check endpoints"),
-        (name = "profiles", description = "Browser profile management endpoints")
+        (name = "profiles", description = "Browser profile management endpoints"),
+        (name = "groups", description = "Groups/Tags management"),
+        (name = "proxies", description = "Proxies management")
     )
 )]
 pub struct ApiDoc;
@@ -76,6 +94,8 @@ pub async fn serve(pool: SqlitePool, app_dir: PathBuf, port: u16, app_handle: Ap
         .route("/updates/latest.json", get(latest_update))
         // Profile App: only browser profile endpoints
         .nest("/api/browser-profiles", handlers::browser_profiles::router())
+        .nest("/api/groups", handlers::groups::router())
+        .nest("/api/proxies", handlers::proxies::router())
         .layer(CorsLayer::permissive())
         .with_state(state);
 

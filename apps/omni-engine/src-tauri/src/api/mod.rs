@@ -42,6 +42,12 @@ pub struct AppState {
         handlers::automa::ws_handler,
         handlers::automa::run_e2e,
         handlers::schedules::run_now,
+        handlers::runs::get_runs,
+        handlers::runs::create_run,
+        handlers::runs::stop_run,
+        handlers::runs::get_logs,
+        handlers::sync::get_sync_status,
+        handlers::sync::force_sync,
     ),
     components(
         schemas(

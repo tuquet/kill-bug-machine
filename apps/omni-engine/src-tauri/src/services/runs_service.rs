@@ -40,16 +40,31 @@ pub async fn get_logs(
 pub async fn get_runs(
     pool: &SqlitePool,
     workflow_id: Option<&str>,
+    status: Option<&str>,
 ) -> Result<Vec<crate::api::handlers::runs::WorkflowRun>, AppError> {
-    let query = if let Some(id) = workflow_id {
-        sqlx::query(
-            "SELECT id, workflow_id, profile_id, schedule_id, status, CAST(started_at AS TEXT) as started_at, CAST(finished_at AS TEXT) as finished_at FROM workflow_runs WHERE workflow_id = ? ORDER BY started_at DESC LIMIT 50"
-        ).bind(id)
-    } else {
-        sqlx::query(
-            "SELECT id, workflow_id, profile_id, schedule_id, status, CAST(started_at AS TEXT) as started_at, CAST(finished_at AS TEXT) as finished_at FROM workflow_runs ORDER BY started_at DESC LIMIT 50"
-        )
-    };
+    let mut query_str = String::from(
+        "SELECT id, workflow_id, profile_id, schedule_id, status, CAST(started_at AS TEXT) as started_at, CAST(finished_at AS TEXT) as finished_at FROM workflow_runs WHERE 1=1"
+    );
+
+    if workflow_id.is_some() {
+        query_str.push_str(" AND workflow_id = ?");
+    }
+    
+    if status.is_some() {
+        query_str.push_str(" AND status = ?");
+    }
+    
+    query_str.push_str(" ORDER BY started_at DESC LIMIT 50");
+
+    let mut query = sqlx::query(&query_str);
+
+    if let Some(id) = workflow_id {
+        query = query.bind(id);
+    }
+    
+    if let Some(s) = status {
+        query = query.bind(s);
+    }
 
     let rows = query.fetch_all(pool).await?;
 

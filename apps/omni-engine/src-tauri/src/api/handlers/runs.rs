@@ -19,6 +19,7 @@ pub struct WorkflowRun {
 pub fn router() -> Router<AppState> {
     Router::new()
         .route("/", axum::routing::get(get_runs).post(create_run))
+        .route("/:id/stop", axum::routing::post(stop_run))
         .route("/logs", axum::routing::get(get_logs))
 }
 
@@ -154,7 +155,8 @@ async fn get_logs(
         (status = 200, description = "List workflow runs")
     ),
     params(
-        ("workflow_id" = Option<String>, Query, description = "Filter by workflow ID")
+        ("workflow_id" = Option<String>, Query, description = "Filter by workflow ID"),
+        ("status" = Option<String>, Query, description = "Filter by status")
     ),
     tag = "runs"
 )]
@@ -163,7 +165,64 @@ async fn get_runs(
     axum::extract::Query(params): axum::extract::Query<std::collections::HashMap<String, String>>,
 ) -> Result<Json<Vec<WorkflowRun>>, AppError> {
     let workflow_id = params.get("workflow_id").map(|s| s.as_str());
-    let runs = runs_service::get_runs(&state.db, workflow_id).await?;
+    let status = params.get("status").map(|s| s.as_str());
+    let runs = runs_service::get_runs(&state.db, workflow_id, status).await?;
 
     Ok(Json(runs))
+}
+
+#[utoipa::path(
+    post,
+    path = "/api/engine/runs/{id}/stop",
+    responses(
+        (status = 200, description = "Run stopped successfully")
+    ),
+    params(
+        ("id" = String, Path, description = "Run ID to stop")
+    ),
+    tag = "runs"
+)]
+async fn stop_run(
+    State(state): State<AppState>,
+    axum::extract::Path(id): axum::extract::Path<String>,
+) -> Result<Json<serde_json::Value>, AppError> {
+    let db = &state.db;
+    let ws_tx = &state.automa_ws_tx;
+
+    // Check if run exists and is RUNNING
+    let run: Option<(String, String)> = sqlx::query_as(
+        "SELECT id, status FROM workflow_runs WHERE id = ?"
+    )
+    .bind(&id)
+    .fetch_optional(db)
+    .await?;
+
+    if let Some((run_id, status)) = run {
+        if status != "RUNNING" && status != "LAUNCHING" {
+            return Err(AppError::BadRequest("Run is not currently running".to_string()));
+        }
+
+        // Update DB
+        sqlx::query("UPDATE workflow_runs SET status = 'CANCELLED', finished_at = CURRENT_TIMESTAMP WHERE id = ?")
+            .bind(&run_id)
+            .execute(db)
+            .await?;
+
+        // Emit websocket event to extension
+        let payload = serde_json::json!({
+            "run_id": run_id
+        });
+        
+        let event = omni_shared::automa::executor::AutomaEvent {
+            event_type: "stop-workflow".to_string(),
+            payload,
+        };
+
+        let _ = ws_tx.send(event);
+        println!("[Engine] Stopped run {} and broadcasted stop-workflow event", run_id);
+
+        Ok(Json(serde_json::json!({ "success": true, "message": "Run stopped" })))
+    } else {
+        Err(AppError::NotFound("Run not found".to_string()))
+    }
 }
